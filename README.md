@@ -8,9 +8,14 @@ This library builds with CMake. It is recommended to do an out-of-source build. 
 ```sh
 mkdir build
 cd build
-CMake .
+cmake ..
 ```
 
+After creating the build files, you can run CMake with the build command.
+
+```sh
+cmake --build .
+```
 
 ## How to use
 
