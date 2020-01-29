@@ -32,9 +32,9 @@
 *.app
 
 # Folders
-archive/
-build/
-cmake*/
-.idea/
-.vscode/
-_build/
+archive/*
+build/*
+cmake*/*
+.idea/*
+.vscode/*
+_build/*
