@@ -32,7 +32,7 @@ matrix:
         packages: ['g++-9', 'ninja-build']
 
   - os: osx
-    osx_image: xcode9
+    osx_image: xcode11.2
 
 script:
   - if [[ "${COMPILER}" != "" ]]; then export CXX=${COMPILER}; fi
