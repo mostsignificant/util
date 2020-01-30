@@ -1,4 +1,7 @@
 # util
+
+[![Travis](https://travis-ci.com/sourcechris/util.svg?branch=master)](https://travis-ci.com/sourcechris/util)
+
 This  library is a collection of utility classes and functions for C++. It is a "best of the rest" collection of 
 independent self-contained headers. This means you can just copy-paste individuak header files from this library and use
 them in your project without additional setup.
