@@ -30,9 +30,7 @@ set_target_properties(gtest_main PROPERTIES FOLDER extern)
 ### UTIL TESTS
 ########################################################################################################################
 
-util_add_test(general 
-    ${UTIL_TEST_DIR}/endian.test
-    ${UTIL_TEST_DIR}/multirator.test
-    ${UTIL_TEST_DIR}/scoped.test
-    )
+util_add_test(endian     ${UTIL_TEST_DIR}/endian.test)
+util_add_test(multirator ${UTIL_TEST_DIR}/multirator.test)
+util_add_test(scoped     ${UTIL_TEST_DIR}/scoped.test)
 

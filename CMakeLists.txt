@@ -23,7 +23,6 @@ set(UTIL_NAME_VERSION        "${UTIL_PROJECT_NAME} v${UTIL_VERSION} (${UTIL_VERS
 ########################################################################################################################
 
 option(BUILD_SHARED_LIBS     "Build shared instead of static libraries."              OFF)
-option(OPTION_SELF_CONTAINED "Create a self-contained install with all dependencies." OFF)
 option(OPTION_BUILD_TESTS    "Build tests."                                           ON)
 option(OPTION_BUILD_DOCS     "Build documentation."                                   OFF)
 

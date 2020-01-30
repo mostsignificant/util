@@ -5,7 +5,7 @@
 
 #include <vector>
 
-TEST(UtilStxMultirator, Iterator) {
+TEST(UtilMultirator, Iterator) {
     const std::vector numbers = { 1, 2, 3, 4, 5 };
     const std::vector names = { "Hello", "World", "!" };
 
