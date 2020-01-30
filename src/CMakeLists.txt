@@ -2,6 +2,8 @@
 ### UTIL LIBRARY
 ########################################################################################################################
 
+set( CMAKE_VERBOSE_MAKEFILE on )
+
 set(UTIL_TARGET_NAME util)
 
 set(UTIL_INC_FILES
@@ -27,3 +29,4 @@ target_compile_features(${UTIL_TARGET_NAME} INTERFACE
 
 target_include_directories(${UTIL_TARGET_NAME} PUBLIC
         ${UTIL_INC_DIR})
+

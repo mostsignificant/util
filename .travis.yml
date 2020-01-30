@@ -33,11 +33,16 @@ matrix:
 
   - os: osx
     osx_image: xcode11.2
+    compiler: clang
 
 script:
   - |
     # Configure build variables
     if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+      if [[ "${COMPILER}" != "" ]]; then
+        export CXX=${COMPILER};
+      fi
+    elif [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
       if [[ "${COMPILER}" != "" ]]; then
         export CXX=${COMPILER};
       fi
