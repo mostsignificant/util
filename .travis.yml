@@ -33,9 +33,7 @@ matrix:
 
   - os: osx
     osx_image: xcode11.2
-    compiler: clang
-    env: COMPILER=clang++ BUILD_TYPE=Release GSL_CXX_STANDARD=17
-    
+
 script:
   - |
     # Configure build variables
@@ -43,9 +41,6 @@ script:
       if [[ "${COMPILER}" != "" ]]; then
         export CXX=${COMPILER};
       fi
-    elif [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
-      export CXX=clang++;
-      export CC=clang;
     fi
 
   - uname -a
