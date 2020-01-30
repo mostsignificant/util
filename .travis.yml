@@ -14,8 +14,15 @@ matrix:
         packages: ['g++-8', 'ninja-build']
 
 script:
+  - if [[ "${COMPILER}" != "" ]]; then export CXX=${COMPILER}; fi
+
+  - uname -a
+  - $CXX --version
+
   - mkdir build
   - cd build
+  
   - cmake ..
   - cmake --build . --config Release -- -j2
+  
   - ctest -C Release -V -j
