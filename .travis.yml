@@ -1,17 +1,21 @@
-dist: trusty
-sudo: false
 language: cpp
-compiler: gcc
+dist: trusty
+sudo: required
 
-addons:
-  apt:
-    sources:
-      - ubuntu-toolchain-r-test
-    packages:
-      - gcc-8
-      - g++-8
-      - cmake
+matrix:
+  include:
+
+  - os: linux
+    compiler: gcc
+    env: COMPILER=g++-8
+    addons:
+      apt:
+        sources: ['ubuntu-toolchain-r-test']
+        packages: ['g++-8', 'ninja-build']
 
 script:
-  - cmake .
-  - cmake --build . -- -j2
+  - mkdir build
+  - cd build
+  - cmake ..
+  - cmake --build . --config Release -- -j2
+  - ctest -C Release -V -j
