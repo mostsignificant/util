@@ -50,6 +50,6 @@ script:
   - cd build
   
   - cmake ..
-  - cmake --build . --config Release -- -j2
+  - cmake --build .
   
-  - ctest -C Release -V -j
+  - ctest
