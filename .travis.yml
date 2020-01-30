@@ -13,8 +13,26 @@ matrix:
         sources: ['ubuntu-toolchain-r-test']
         packages: ['g++-8', 'ninja-build']
 
+  - os: linux
+    compiler: gcc
+    env: COMPILER=g++-9
+    addons:
+      apt:
+        sources: ['ubuntu-toolchain-r-test']
+        packages: ['g++-9', 'ninja-build']
+
+  - os: linux
+    compiler: gcc
+    env:
+      - COMPILER=g++-9
+      - CXXFLAGS=-std=c++2a
+    addons:
+      apt:
+        sources: ['ubuntu-toolchain-r-test']
+        packages: ['g++-9', 'ninja-build']
+
   - os: osx
-    osx_image: xcode8.3
+    osx_image: xcode9
 
 script:
   - if [[ "${COMPILER}" != "" ]]; then export CXX=${COMPILER}; fi
