@@ -13,6 +13,9 @@ matrix:
         sources: ['ubuntu-toolchain-r-test']
         packages: ['g++-8', 'ninja-build']
 
+  - os: osx
+    osx_image: xcode8.3
+
 script:
   - if [[ "${COMPILER}" != "" ]]; then export CXX=${COMPILER}; fi
 
