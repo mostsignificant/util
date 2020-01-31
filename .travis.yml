@@ -35,6 +35,10 @@ matrix:
     osx_image: xcode11.2
     compiler: clang
 
+  - os: osx
+    osx_image: xcode11.2
+    compiler: gcc
+
 script:
   - |
     # Configure build variables
