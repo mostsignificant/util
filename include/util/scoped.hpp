@@ -39,8 +39,12 @@ namespace util {
 template <class T>
 class scoped {
 public:
-    scoped(T* ptr);
+    explicit scoped(T* ptr) noexcept;
     ~scoped();
+
+    constexpr scoped() noexcept = default;
+    scoped(const scoped&)       = delete;
+    scoped& operator=(const scoped&) = delete;
 
     T&       operator*() const;
     T*       operator->() const;
@@ -62,7 +66,7 @@ class scoped_nullptr_exception {};
 }  // namespace util
 
 template <class T>
-util::scoped<T>::scoped(T* ptr) : ptr(ptr) {}
+util::scoped<T>::scoped(T* ptr) noexcept : ptr(ptr) {}
 
 template <class T>
 util::scoped<T>::~scoped() {
