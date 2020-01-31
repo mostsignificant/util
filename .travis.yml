@@ -33,6 +33,16 @@ matrix:
         sources: ['ubuntu-toolchain-r-test']
         packages: ['g++-8']
 
+### LINUX + CLANG ##############################################################
+
+  - os: linux
+    compiler: clang
+    env: COMPILER=clang++-7
+    addons:
+      apt:
+        sources: ['ubuntu-toolchain-r-test', 'llvm-toolchain-trusty-7']
+        packages: ['clang-7']
+
 ### OSX + GCC ##################################################################
 
   - os: osx
