@@ -24,9 +24,6 @@ add_library(util STATIC
         ${UTIL_SRC_FILES}
         )
 
-target_compile_features(${UTIL_TARGET_NAME} INTERFACE
-        cxx_std_17)
-
 target_include_directories(${UTIL_TARGET_NAME} PUBLIC
         ${UTIL_INC_DIR})
 
