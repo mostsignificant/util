@@ -12,7 +12,7 @@ struct dtor_notifier {
 
 TEST(UtilScoped, CtorPointer) {
     const util::scoped number(new int(42));
-    EXPECT_EQ(*number, 42);
+    EXPECT_TRUE(number);
 }
 
 TEST(UtilScoped, CtorDefault) {
@@ -26,4 +26,9 @@ TEST(UtilScoped, Dtor) {
     { const util::scoped notifier(new helper::dtor_notifier(destroyed)); }
 
     EXPECT_TRUE(destroyed);
+}
+
+TEST(UtilScoped, Deref) {
+    const util::scoped six(new double(6.0));
+    EXPECT_EQ(*six, 6.0);
 }

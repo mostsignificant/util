@@ -59,11 +59,15 @@ private:
     T* ptr = nullptr;
 };
 
-#ifdef UTIL_USE_EXCEPTIONS
+#if defined(UTIL_USE_EXCEPTIONS)
 class scoped_nullptr_exception {};
 #endif
 
 }  // namespace util
+
+#if defined(UTIL_ASSERT)
+#include "util/assert.hpp"
+#endif
 
 template <class T>
 util::scoped<T>::scoped(T* ptr) noexcept : ptr(ptr) {}
@@ -75,15 +79,17 @@ util::scoped<T>::~scoped() {
 
 template <class T>
 T& util::scoped<T>::operator*() const {
-#ifdef UTIL_USE_EXCEPTIONS
+#if defined(UTIL_USE_EXCEPTIONS)
     if (!ptr) throw scoped_nullptr_exception();
+#elif defined(UTIL_ASSERT)
+    util::assert(ptr);
 #endif
     return *ptr;
 }
 
 template <class T>
 T* util::scoped<T>::operator->() const {
-#ifdef UTIL_USE_EXCEPTIONS
+#if defined(UTIL_USE_EXCEPTIONS)
     if (!ptr) throw scoped_nullptr_exception();
 #endif
     return ptr;
@@ -116,7 +122,7 @@ void util::scoped<T>::swap(scoped& other) noexcept {
 
 template <class T>
 T* util::scoped<T>::get() const noexcept {
-#ifdef UTIL_USE_EXCEPTIONS
+#if defined(UTIL_USE_EXCEPTIONS)
     if (!ptr) throw scoped_nullptr_exception();
 #endif
     return ptr;

@@ -2,18 +2,18 @@
 ### UTIL LIBRARY
 ########################################################################################################################
 
-set( CMAKE_VERBOSE_MAKEFILE on )
-
 set(UTIL_TARGET_NAME util)
 
 set(UTIL_INC_FILES
         ${UTIL_INC_DIR}/util/endian
+        ${UTIL_INC_DIR}/util/flags
         ${UTIL_INC_DIR}/util/multirator
         ${UTIL_INC_DIR}/util/scoped
         )
 
 set(UTIL_SRC_FILES
         ${UTIL_SRC_DIR}/endian
+        ${UTIL_SRC_DIR}/flags
         ${UTIL_SRC_DIR}/multirator
         ${UTIL_SRC_DIR}/scoped
         )
