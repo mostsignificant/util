@@ -5,21 +5,7 @@ sudo: required
 matrix:
   include:
 
-  - os: linux
-    compiler: gcc
-    env: COMPILER=g++-8
-    addons:
-      apt:
-        sources: ['ubuntu-toolchain-r-test']
-        packages: ['g++-8', 'ninja-build']
-
-  - os: linux
-    compiler: gcc
-    env: COMPILER=g++-9
-    addons:
-      apt:
-        sources: ['ubuntu-toolchain-r-test']
-        packages: ['g++-9', 'ninja-build']
+### LINUX + GCC ################################################################
 
   - os: linux
     compiler: gcc
@@ -29,15 +15,45 @@ matrix:
     addons:
       apt:
         sources: ['ubuntu-toolchain-r-test']
-        packages: ['g++-9', 'ninja-build']
+        packages: ['g++-9']
+
+  - os: linux
+    compiler: gcc
+    env: COMPILER=g++-9
+    addons:
+      apt:
+        sources: ['ubuntu-toolchain-r-test']
+        packages: ['g++-9']
+
+  - os: linux
+    compiler: gcc
+    env: COMPILER=g++-8
+    addons:
+      apt:
+        sources: ['ubuntu-toolchain-r-test']
+        packages: ['g++-8']
+
+### OSX + GCC ##################################################################
+
+  - os: osx
+    osx_image: xcode11.2
+    compiler: gcc
+
+  - os: osx
+    osx_image: xcode10.2
+    compiler: gcc
+
+### OSX + CLANG ################################################################
 
   - os: osx
     osx_image: xcode11.2
     compiler: clang
 
   - os: osx
-    osx_image: xcode11.2
-    compiler: gcc
+    osx_image: xcode10.2
+    compiler: clang
+
+### BUILD ######################################################################
 
 script:
   - |
