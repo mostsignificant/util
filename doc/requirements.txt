@@ -1,1 +1,2 @@
-exhale
+Sphinx==2.0.1
+Exhale
