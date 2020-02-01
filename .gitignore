@@ -38,3 +38,8 @@ cmake*/*
 .idea/*
 .vscode/*
 _build/*
+doc/_build/*
+doc/api/*
+doc/doxyoutput/*
+doc/html/*
+doc/latex/*

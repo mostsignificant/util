@@ -32,7 +32,6 @@
 #include <vector>
 
 namespace util {
-namespace dat {
 
 template <class T, class Compare = std::less<T>,
           class Allocator = std::allocator<T>>
@@ -130,24 +129,22 @@ private:
     std::vector<T, Allocator> _elements;
 };
 
-template <class T, class Compare, class Allocator>
-sorted_vector<T, Compare, Allocator>::sorted_vector() noexcept {}
+}  // namespace util
 
 template <class T, class Compare, class Allocator>
-sorted_vector<T, Compare, Allocator>::sorted_vector(
+util::sorted_vector<T, Compare, Allocator>::sorted_vector() noexcept {}
+
+template <class T, class Compare, class Allocator>
+util::sorted_vector<T, Compare, Allocator>::sorted_vector(
     const Allocator& alloc) noexcept
     : _elements(alloc) {}
 
 template <class T, class Compare, class Allocator>
-sorted_vector<T, Compare, Allocator>::sorted_vector(size_type        count,
-                                                    const T&         value,
-                                                    const Allocator& alloc)
+util::sorted_vector<T, Compare, Allocator>::sorted_vector(
+    size_type count, const T& value, const Allocator& alloc)
     : _elements(count, value, alloc) {}
 
 template <class T, class Compare, class Allocator>
-sorted_vector<T, Compare, Allocator>::sorted_vector(size_type        count,
-                                                    const Allocator& alloc)
+util::sorted_vector<T, Compare, Allocator>::sorted_vector(
+    size_type count, const Allocator& alloc)
     : _elements(count, alloc) {}
-
-}  // namespace dat
-}  // namespace util

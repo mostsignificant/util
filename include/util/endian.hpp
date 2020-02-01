@@ -52,7 +52,7 @@ uint64_t ntoh(uint64_t value);
 /**
  * Converts a 8-bit value from host to network byte order.
  *
- * @section test/endian.test.cpp HostToNetwork8bit
+ * @snippet test/endian.test.cpp endian_hton_uint8t
  *
  * @param value the 8-bit value in host byte order to convert
  * @return the value in network byte order
@@ -62,6 +62,8 @@ uint8_t util::hton(uint8_t value) { return value; }
 /**
  * Converts a 16-bit value from host to network byte order.
  *
+ * @snippet test/endian.test.cpp endian_hton_uint16t
+ *
  * @param value the 16-bit value in host byte order to convert
  * @return the value in network byte order
  */
@@ -70,6 +72,8 @@ uint16_t util::hton(uint16_t value) { return htons(value); }
 /**
  * Converts a 32-bit value from host to network byte order.
  *
+ * @snippet test/endian.test.cpp endian_hton_uint32t
+ *
  * @param value the 32-bit value in host byte order to convert
  * @return the value in network byte order
  */
@@ -77,6 +81,8 @@ uint32_t util::hton(uint32_t value) { return htonl(value); }
 
 /**
  * Converts a 64-bit value from host to network byte order.
+ *
+ * @snippet test/endian.test.cpp endian_hton_uint64t
  *
  * @param value the 64-bit value in host byte order to convert
  * @return the value in network byte order
