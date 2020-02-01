@@ -39,24 +39,28 @@ namespace util {
 template <class T>
 class scoped {
 public:
-    explicit scoped(T* ptr) noexcept;
+    using element_type = T;
+    using pointer      = element_type*;
+    using reference    = element_type&;
+
+    explicit scoped(pointer ptr) noexcept;
     ~scoped();
 
     constexpr scoped() noexcept = default;
     scoped(const scoped&)       = delete;
     scoped& operator=(const scoped&) = delete;
 
-    T&       operator*() const;
-    T*       operator->() const;
-    explicit operator bool() const noexcept;
+    reference operator*() const;
+    pointer   operator->() const;
+    explicit  operator bool() const noexcept;
 
-    T*   release() noexcept;
-    void reset(T* ptr) noexcept;
-    void swap(scoped& other) noexcept;
-    T*   get() const noexcept;
+    pointer release() noexcept;
+    void    reset(pointer ptr) noexcept;
+    void    swap(scoped& other) noexcept;
+    pointer get() const noexcept;
 
 private:
-    T* ptr = nullptr;
+    pointer ptr = nullptr;
 };
 
 #if defined(UTIL_USE_EXCEPTIONS)
@@ -70,7 +74,7 @@ class scoped_nullptr_exception {};
 #endif
 
 template <class T>
-util::scoped<T>::scoped(T* ptr) noexcept : ptr(ptr) {}
+util::scoped<T>::scoped(pointer ptr) noexcept : ptr(ptr) {}
 
 template <class T>
 util::scoped<T>::~scoped() {
@@ -78,7 +82,7 @@ util::scoped<T>::~scoped() {
 }
 
 template <class T>
-T& util::scoped<T>::operator*() const {
+typename util::scoped<T>::reference util::scoped<T>::operator*() const {
 #if defined(UTIL_USE_EXCEPTIONS)
     if (!ptr) throw scoped_nullptr_exception();
 #elif defined(UTIL_ASSERT)
@@ -88,7 +92,7 @@ T& util::scoped<T>::operator*() const {
 }
 
 template <class T>
-T* util::scoped<T>::operator->() const {
+typename util::scoped<T>::pointer util::scoped<T>::operator->() const {
 #if defined(UTIL_USE_EXCEPTIONS)
     if (!ptr) throw scoped_nullptr_exception();
 #endif
@@ -101,14 +105,14 @@ util::scoped<T>::operator bool() const noexcept {
 }
 
 template <class T>
-T* util::scoped<T>::release() noexcept {
+typename util::scoped<T>::pointer util::scoped<T>::release() noexcept {
     const auto tmp = ptr;
     ptr            = nullptr;
     return tmp;
 }
 
 template <class T>
-void util::scoped<T>::reset(T* ptr) noexcept {
+void util::scoped<T>::reset(pointer ptr) noexcept {
     if (this->ptr) delete this->ptr;
     this->ptr = ptr;
 }
@@ -121,7 +125,7 @@ void util::scoped<T>::swap(scoped& other) noexcept {
 }
 
 template <class T>
-T* util::scoped<T>::get() const noexcept {
+typename util::scoped<T>::pointer util::scoped<T>::get() const noexcept {
 #if defined(UTIL_USE_EXCEPTIONS)
     if (!ptr) throw scoped_nullptr_exception();
 #endif

@@ -1,8 +1,6 @@
 #include "gtest/gtest.h"
+#include "test.hpp"
 #include "util/endian.hpp"
-
-#undef assert
-#define assert EXPECT_TRE
 
 TEST(UtilEndian, HostToNetwork8bit) {
     //! [endian_hton_uint8t]
@@ -37,13 +35,13 @@ TEST(UtilEndian, HostToNetwork32bit) {
 
 TEST(UtilEndian, HostToNetwork64bit) {
     //! [endian_hton_uint64t]
-    assert(util::hton(uint64_t(9223372036854775807)) ==
-           uint64_t(18446744073709551487));
+    assert(util::hton(uint64_t(9223372036854775807U)) ==
+           uint64_t(18446744073709551487U));
     //! [endian_hton_uint64t]
 
     EXPECT_EQ(util::hton(uint64_t(0)), uint64_t(0));
-    EXPECT_EQ(util::hton(uint64_t(18446744073709551615)),
-              uint64_t(18446744073709551615));
+    EXPECT_EQ(util::hton(uint64_t(18446744073709551615U)),
+              uint64_t(18446744073709551615U));
     EXPECT_EQ(util::hton(util::hton(uint64_t(9223372036854775807))),
               uint64_t(9223372036854775807));
 }
@@ -75,11 +73,11 @@ TEST(UtilEndian, NetworkToHost32bit) {
 
 TEST(UtilEndian, NetworkToHost64bit) {
     EXPECT_EQ(util::ntoh(uint64_t(0)), uint64_t(0));
-    EXPECT_EQ(util::ntoh(uint64_t(18446744073709551487)),
-              uint64_t(9223372036854775807));
-    EXPECT_EQ(util::ntoh(uint64_t(18446744073709551615)),
-              uint64_t(18446744073709551615));
+    EXPECT_EQ(util::ntoh(uint64_t(18446744073709551487U)),
+              uint64_t(9223372036854775807U));
+    EXPECT_EQ(util::ntoh(uint64_t(18446744073709551615U)),
+              uint64_t(18446744073709551615U));
 
-    EXPECT_EQ(util::ntoh(util::ntoh(uint64_t(9223372036854775807))),
-              uint64_t(9223372036854775807));
+    EXPECT_EQ(util::ntoh(util::ntoh(uint64_t(9223372036854775807U))),
+              uint64_t(9223372036854775807U));
 }

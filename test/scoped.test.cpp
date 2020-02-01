@@ -1,4 +1,5 @@
 #include "gtest/gtest.h"
+#include "test.hpp"
 #include "util/scoped.hpp"
 
 namespace helper {
@@ -11,8 +12,10 @@ struct dtor_notifier {
 }  // namespace helper
 
 TEST(UtilScoped, CtorPointer) {
+    //! [scoped_ctor]
     const util::scoped number(new int(42));
-    EXPECT_TRUE(number);
+    assert(number);
+    //! [scoped_ctor]
 }
 
 TEST(UtilScoped, CtorDefault) {
