@@ -1,6 +1,7 @@
 # util
 
 [![Travis](https://travis-ci.com/sourcechris/util.svg?branch=master)](https://travis-ci.com/sourcechris/util)
+[![Documentation](http://readthedocs.org/projects/utilsourcechris/badge/?version=latest)](https://utilsourcechris.readthedocs.io/en/latest/?badge=latest)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/sourcechris/util/master/LICENSE.MIT)
 
 This  library is a collection of utility classes and functions for C++. It is a collection of independent self-contained headers. This means you can just copy-paste individualheader files from this library and use them in your project without additional setup.
