@@ -10,7 +10,7 @@ cmake_minimum_required(VERSION 3.8)
 
 set(UTIL_PROJECT_NAME        "util")
 set(UTIL_PROJECT_DESCRIPTION "A collection of utility classes and functions for C++.")
-set(UTIL_AUTHOR_DOMAIN       "https://github.com/sourcechris/util")
+set(UTIL_AUTHOR_DOMAIN       "https://github.com/mostsignificant/util")
 set(UTIL_AUTHOR_MAINTAINER   "cg@2601.me")
 set(UTIL_VERSION_MAJOR       "0")
 set(UTIL_VERSION_MINOR       "0")

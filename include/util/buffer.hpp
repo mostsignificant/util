@@ -1,6 +1,6 @@
 /*
  * util - a collection of utility classes and functions for C++
- * <https://github.com/sourcechris/util>
+ * <https://github.com/mostsignificant/util>
  *
  * MIT License
  *
@@ -56,30 +56,29 @@ struct buffer_const_iterator;
  * @tparam Size the base part fixed size of the buffer
  * @tparam Allocator the allocator for the dynamic part of the buffer
  */
-template <class Type, std::size_t Size = 24,
-          class Allocator = std::allocator<Type>>
+template <class Type, std::size_t Size = 24, class Allocator = std::allocator<Type>>
 class buffer {
 public:
-    using allocator_type  = Allocator;
+    using allocator_type = Allocator;
     using difference_type = std::ptrdiff_t;
-    using size_type       = std::size_t;
-    using value_type      = Type;
+    using size_type = std::size_t;
+    using value_type = Type;
 
-    using iterator        = detail::buffer_iterator<Type>;
-    using const_iterator  = detail::buffer_const_iterator<Type>;
-    using reference       = value_type&;
+    using iterator = detail::buffer_iterator<Type>;
+    using const_iterator = detail::buffer_const_iterator<Type>;
+    using reference = value_type&;
     using const_reference = const value_type&;
-    using pointer         = value_type*;
-    using const_pointer   = const value_type* const;
+    using pointer = value_type*;
+    using const_pointer = const value_type* const;
 
     buffer(const std::initializer_list<Type>& list);
 
-    bool      empty() const noexcept;
+    bool empty() const noexcept;
     size_type size() const noexcept;
 
 private:
-    std::size_t                  stack_position = 0U;
-    std::array<Type, Size>       stack;
+    std::size_t stack_position = 0U;
+    std::array<Type, Size> stack;
     std::vector<Type, Allocator> heap;
 };
 
@@ -117,8 +116,7 @@ buffer<Type, Size, Allocator>::buffer(const std::initializer_list<Type>& list) {
  * @return the current number of elements in the buffer
  */
 template <class Type, std::size_t Size, class Allocator>
-typename buffer<Type, Size, Allocator>::size_type
-buffer<Type, Size, Allocator>::size() const noexcept {
+typename buffer<Type, Size, Allocator>::size_type buffer<Type, Size, Allocator>::size() const noexcept {
     return stack_position + heap.size();
 }
 

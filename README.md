@@ -1,8 +1,8 @@
 # util
 
-[![Travis](https://travis-ci.com/mostsignificant/util.svg?branch=master)](https://travis-ci.com/sourcechris/util)
+[![Travis](https://travis-ci.com/mostsignificant/util.svg?branch=master)](https://travis-ci.com/mostsignificant/util)
 [![Documentation](http://readthedocs.org/projects/mostsignificantutil/badge/?version=latest)](https://mostsignificantutil.readthedocs.io/en/latest/?badge=latest)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/sourcechris/util/master/LICENSE.MIT)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/mostsignificant/util/master/LICENSE.MIT)
 
 This library is a collection of utility classes and functions for C++. It is a collection of independent self-contained 
 headers. This means you can just copy-paste individual header files from this library and use them in your project 

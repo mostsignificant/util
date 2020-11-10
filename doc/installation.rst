@@ -10,4 +10,4 @@ Since the coml library is a header-only library, you can also simply copy and
 paste the coml folder from the include directory into your own project and put 
 the path into your project's include paths.
 
-.. _github: https://github.com/sourcechris/coml
+.. _github: https://github.com/mostsignificant/coml

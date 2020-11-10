@@ -1,6 +1,6 @@
 /*
  * util - a collection of utility classes and functions for C++
- * <https://github.com/sourcechris/util>
+ * <https://github.com/mostsignificant/util>
  *
  * MIT License
  *

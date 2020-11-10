@@ -1,6 +1,6 @@
 /*
  * util - a collection of utility classes and functions for C++
- * <https://github.com/sourcechris/util>
+ * <https://github.com/mostsignificant/util>
  *
  * MIT License
  *
@@ -40,23 +40,23 @@ template <class T>
 class scoped {
 public:
     using element_type = T;
-    using pointer      = element_type*;
-    using reference    = element_type&;
+    using pointer = element_type*;
+    using reference = element_type&;
 
     explicit scoped(pointer ptr) noexcept;
     ~scoped();
 
     constexpr scoped() noexcept = default;
-    scoped(const scoped&)       = delete;
+    scoped(const scoped&) = delete;
     scoped& operator=(const scoped&) = delete;
 
     reference operator*() const;
-    pointer   operator->() const;
-    explicit  operator bool() const noexcept;
+    pointer operator->() const;
+    explicit operator bool() const noexcept;
 
     pointer release() noexcept;
-    void    reset(pointer ptr) noexcept;
-    void    swap(scoped& other) noexcept;
+    void reset(pointer ptr) noexcept;
+    void swap(scoped& other) noexcept;
     pointer get() const noexcept;
 
 private:
@@ -107,7 +107,7 @@ util::scoped<T>::operator bool() const noexcept {
 template <class T>
 typename util::scoped<T>::pointer util::scoped<T>::release() noexcept {
     const auto tmp = ptr;
-    ptr            = nullptr;
+    ptr = nullptr;
     return tmp;
 }
 
@@ -120,8 +120,8 @@ void util::scoped<T>::reset(pointer ptr) noexcept {
 template <class T>
 void util::scoped<T>::swap(scoped& other) noexcept {
     const auto tmp = ptr;
-    ptr            = other.ptr;
-    other.ptr      = tmp;
+    ptr = other.ptr;
+    other.ptr = tmp;
 }
 
 template <class T>

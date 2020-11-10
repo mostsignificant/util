@@ -22,7 +22,7 @@ Licensing
 
 The util library is licensed under the MIT_ license.
 
-.. _MIT: https://raw.githubusercontent.com/sourcechris/util/master/LICENSE.MIT
+.. _MIT: https://raw.githubusercontent.com/mostsignificant/util/master/LICENSE.MIT
 
 .. toctree::
    :caption: INSTALLATION
