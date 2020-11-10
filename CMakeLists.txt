@@ -16,15 +16,15 @@ set(UTIL_VERSION_MAJOR       "0")
 set(UTIL_VERSION_MINOR       "0")
 set(UTIL_VERSION_PATCH       "1")
 set(UTIL_VERSION             "${UTIL_VERSION_MAJOR}.${UTIL_VERSION_MINOR}.${UTIL_VERSION_PATCH}")
-set(UTIL_NAME_VERSION        "${UTIL_PROJECT_NAME} v${UTIL_VERSION} (${UTIL_VERSION_REVISION})")
+set(UTIL_NAME_VERSION        "${UTIL_PROJECT_NAME} v${UTIL_VERSION}")
 
 ########################################################################################################################
 ### PROJECT OPTIONS
 ########################################################################################################################
 
-option(BUILD_SHARED_LIBS     "Build shared instead of static libraries."              OFF)
-option(OPTION_BUILD_TESTS    "Build tests."                                           ON)
-option(OPTION_BUILD_DOCS     "Build documentation."                                   OFF)
+option(BUILD_SHARED_LIBS     "Build shared instead of static libraries." OFF)
+option(BUILD_TESTS           "Build tests."                              OFF)
+option(BUILD_DOCS            "Build documentation."                      OFF)
 
 ########################################################################################################################
 ### PROJECT SETUP
@@ -37,7 +37,7 @@ set(UTIL_INC_DIR ${PROJECT_SOURCE_DIR}/include)
 
 add_subdirectory(src)
 
-if(OPTION_BUILD_TESTS)
+if(BUILD_TESTS)
     enable_testing()
     add_subdirectory(test)
 endif()

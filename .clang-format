@@ -6,7 +6,7 @@ AccessModifierOffset: -4
 AlignEscapedNewlines: Left
 AlignOperands: true
 AlignTrailingComments: true
-ColumnLimit: 80
+ColumnLimit: 120
 IndentWidth: 4
 UseTab: Never
 ---
