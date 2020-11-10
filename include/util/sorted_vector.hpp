@@ -23,6 +23,7 @@
 #ifndef THAT_THIS_UTIL_SORTED_VECTOR_HEADER_IS_ALREADY_INCLUDED
 #define THAT_THIS_UTIL_SORTED_VECTOR_HEADER_IS_ALREADY_INCLUDED
 
+#include <algorithm>
 #include <functional>
 #include <memory>
 #include <vector>
