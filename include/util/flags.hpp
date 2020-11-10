@@ -25,7 +25,8 @@
  * IN THE SOFTWARE.
  */
 
-#pragma once
+#ifndef THAT_THIS_UTIL_FLAGS_HEADER_HEADER_FILE_IS_ALREADY_INCLUDED
+#define THAT_THIS_UTIL_FLAGS_HEADER_HEADER_FILE_IS_ALREADY_INCLUDED
 
 #include <cstdint>
 #include <initializer_list>
@@ -35,8 +36,7 @@ namespace util {
 /** A helper for storing an OR-combination of enum values.
  *
  * @tparam Enum the used enum
- * @tparam EnumUnderlyingType the enum's underlying type, 32-bit integer by
- * default
+ * @tparam EnumUnderlyingType the enum's underlying type, 32-bit integer by default
  */
 template <class Enum, class EnumUnderlyingType = int32_t>
 class flags {
@@ -44,12 +44,12 @@ public:
     flags(Enum value);
     flags(std::initializer_list<Enum> values);
 
-    flags()                                             = default;
-    flags(flags<Enum, EnumUnderlyingType>&& other)      = default;
+    flags() = default;
+    flags(flags<Enum, EnumUnderlyingType>&& other) = default;
     flags(const flags<Enum, EnumUnderlyingType>& other) = default;
-    ~flags()                                            = default;
+    ~flags() = default;
 
-         operator EnumUnderlyingType() const;
+    operator EnumUnderlyingType() const;
     bool operator!() const;
 
 private:
@@ -67,8 +67,7 @@ util::flags<Enum, EnumUnderlyingType>::operator EnumUnderlyingType() const {
 }
 
 template <class Enum, class EnumUnderlyingType>
-util::flags<Enum, EnumUnderlyingType>::flags(
-    std::initializer_list<Enum> values) {
+util::flags<Enum, EnumUnderlyingType>::flags(std::initializer_list<Enum> values) {
     for (auto value : values) {
         this->value |= value;
     }
@@ -78,3 +77,5 @@ template <class Enum, class EnumUnderlyingType>
 bool util::flags<Enum, EnumUnderlyingType>::operator!() const {
     return (value == 0);
 }
+
+#endif  // THAT_THIS_UTIL_FLAGS_HEADER_HEADER_FILE_IS_ALREADY_INCLUDED
