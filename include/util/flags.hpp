@@ -4,7 +4,7 @@
  *
  * MIT License
  *
- * Copyright (c) 2020 - 2021 Christian Göhring
+ * Copyright (c) 2020-2021 Christian Göhring
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -47,31 +47,30 @@ namespace util {
  * This class is enabled to work with UTIL_NO_STD_LIBRARY defined.
  *
  * @tparam Enum the used enum
- * @tparam EnumUnderlyingType the enum's underlying type, 32-bit integer by
- * default
+ * @tparam EnumUnderlyingType the enum's underlying type, 32-bit integer by default
  */
 template <class Enum, class EnumUnderlyingType = util::int32>
 class flags {
 public:
-    flags(Enum value);
+    explicit flags(Enum value);
     flags(util::initializer_list<Enum> values);
 
     flags() = default;
     ~flags() = default;
-    flags(flags&& other) = default;
+    flags(flags&& other) noexcept = default;
     flags(const flags& other) = default;
-    flags& operator=(flags&& other) = default;
-    flags& operator=(const flags& other) = default;
+    auto operator=(flags&& other) noexcept -> flags& = default;
+    auto operator=(const flags& other) -> flags& = default;
 
-    operator EnumUnderlyingType() const;
-    operator bool() const noexcept;
-    bool operator!() const noexcept;
+    explicit operator EnumUnderlyingType() const;
+    explicit operator bool() const noexcept;
+    auto operator!() const noexcept -> bool;
 
-    flags& flip(Enum value) noexcept;
+    auto flip(Enum value) noexcept -> flags&;
     void reset() noexcept;
     void reset(Enum value) noexcept;
-    flags& set(Enum value, bool on = true) noexcept;
-    bool test(Enum value) const noexcept;
+    auto set(Enum value, bool on = true) noexcept -> flags&;
+    auto test(Enum value) const noexcept -> bool;
 
 private:
     EnumUnderlyingType value_ = static_cast<EnumUnderlyingType>(0);
@@ -90,9 +89,10 @@ util::flags<Enum, EnumUnderlyingType>::flags(Enum value) : value_(value) {}
  * initializer_list OR'd together.
  */
 template <class Enum, class EnumUnderlyingType>
-util::flags<Enum, EnumUnderlyingType>::flags(
-    util::initializer_list<Enum> values) {
-    for (auto&& value : values) value_ |= value;
+util::flags<Enum, EnumUnderlyingType>::flags(util::initializer_list<Enum> values) {
+    for (auto&& value : values) {
+        value_ |= value;
+    }
 }
 
 /**
@@ -133,19 +133,9 @@ bool util::flags<Enum, EnumUnderlyingType>::operator!() const noexcept {
  * @snippet test/flags.test.cpp flags_flip
  */
 template <class Enum, class EnumUnderlyingType>
-util::flags<Enum, EnumUnderlyingType>&
-util::flags<Enum, EnumUnderlyingType>::flip(Enum value) noexcept {
+auto util::flags<Enum, EnumUnderlyingType>::flip(Enum value) noexcept
+    -> util::flags<Enum, EnumUnderlyingType>& {
     set(value, !test(value));
-}
-
-/**
- * Returns true if the given enum flag value is set or not.
- *
- * @snippet test/flags.test.cpp flags_test
- */
-template <class Enum, class EnumUnderlyingType>
-bool util::flags<Enum, EnumUnderlyingType>::test(Enum value) const noexcept {
-    return value_ & value;
 }
 
 /**
@@ -174,12 +164,23 @@ void util::flags<Enum, EnumUnderlyingType>::reset(Enum value) noexcept {
  * @snippet test/flags.test.cpp flags_set
  */
 template <class Enum, class EnumUnderlyingType>
-util::flags<Enum, EnumUnderlyingType>&
-util::flags<Enum, EnumUnderlyingType>::set(Enum value, bool on) noexcept {
-    if (on)
+auto util::flags<Enum, EnumUnderlyingType>::set(Enum value, bool on) noexcept
+    -> util::flags<Enum, EnumUnderlyingType>& {
+    if (on) {
         value_ |= value;
-    else
+    } else {
         value_ &= ~value;
+    }
+}
+
+/**
+ * Returns true if the given enum flag value is set or not.
+ *
+ * @snippet test/flags.test.cpp flags_test
+ */
+template <class Enum, class EnumUnderlyingType>
+auto util::flags<Enum, EnumUnderlyingType>::test(Enum value) const noexcept -> bool {
+    return value_ & value;
 }
 
 #endif  // THAT_THIS_UTIL_FLAGS_HEADER_HEADER_FILE_IS_ALREADY_INCLUDED

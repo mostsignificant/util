@@ -5,15 +5,12 @@ The util library offers different classes for ressource management following a
 RAII style. These classes resemble and are inspired by C++ standard library 
 classes but provide their own additional features for adaptability.
 
-scoped
-------
+util::scoped
+------------
 
-.. literalinclude:: ../test/scoped.test.cpp
-   :lines: 16-17
+.. doxygenclass:: util::scoped
 
-shared
-------
+util::shared
+------------
 
-guarded
--------
-
+.. doxygenclass:: util::shared

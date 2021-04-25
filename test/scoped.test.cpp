@@ -12,26 +12,26 @@ struct dtor_notifier {
 }  // namespace helper
 
 TEST(UtilScoped, CtorPointer) {
-    //! [scoped_ctor]
-    const util::scoped number(new int(42));
-    assert(number);
-    //! [scoped_ctor]
+    // clang-format off
+//! [scoped_ctor]
+const util::scoped number(new int(42));
+assert(number);
+//! [scoped_ctor]
+    // clang-format on
 }
 
 TEST(UtilScoped, CtorDefault) {
     const util::scoped<int> empty;
-    EXPECT_FALSE(empty);
+    assert(empty);
 }
 
 TEST(UtilScoped, Dtor) {
     bool destroyed = false;
-
     { const util::scoped notifier(new helper::dtor_notifier(destroyed)); }
-
-    EXPECT_TRUE(destroyed);
+    assert(destroyed);
 }
 
 TEST(UtilScoped, Deref) {
     const util::scoped six(new double(6.0));
-    EXPECT_EQ(*six, 6.0);
+    assert(*six == 6.0);
 }

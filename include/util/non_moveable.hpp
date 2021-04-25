@@ -25,18 +25,25 @@
  * IN THE SOFTWARE.
  */
 
-#ifndef THAT_THIS_UTIL_SHARED_HEADER_IS_ALREADY_INCLUDED
-#define THAT_THIS_UTIL_SHARED_HEADER_IS_ALREADY_INCLUDED
+#ifndef THAT_THIS_UTIL_NON_COPYABLE_HEADER_IS_ALREADY_INCLUDED
+#define THAT_THIS_UTIL_NON_COPYABLE_HEADER_IS_ALREADY_INCLUDED
 
 namespace util {
 
-template <class T>
-class shared {
+/**
+ * A helper class to make a class or struct non-moveable.
+ *
+ * This class can be derived from to make a class non-moveable in a verbose way.
+ *
+ * @snippet
+ */
+// NOLINTNEXTLINE
+class non_moveable {
 public:
-private:
-    util::size_t ref_ = 0;
+    non_moveable(const non_moveable&&) = delete;
+    auto operator=(const non_moveable&) -> non_moveable& = delete;
 };
 
 }  // namespace util
 
-#endif  // THAT_THIS_UTIL_SHARED_HEADER_IS_ALREADY_INCLUDED
+#endif  // THAT_THIS_UTIL_NON_COPYABLE_HEADER_IS_ALREADY_INCLUDED

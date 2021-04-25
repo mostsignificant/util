@@ -16,13 +16,15 @@
 
 # -- Project information -----------------------------------------------------
 
+import textwrap
+import sphinx_rtd_theme
+
 project = 'util'
-copyright = '2020, Christian Göhring'
+copyright = '2020-2021, Christian Göhring'
 author = 'Christian Göhring'
 
 # The full version, including alpha/beta/rc tags
 release = '2020'
-
 
 # -- General configuration ---------------------------------------------------
 
@@ -38,14 +40,11 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 # -- Options for HTML output -------------------------------------------------
 
-import sphinx_rtd_theme
-
 html_theme = 'sphinx_rtd_theme'
 
 html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 
 html_static_path = ['_static']
-
 
 # -- Breathe configuration ---------------------------------------------------
 
@@ -55,10 +54,7 @@ breathe_projects = {
 
 breathe_default_project = "util"
 
-
 # -- Exhale configuration ----------------------------------------------------
-
-import textwrap
 
 exhale_args = {
     "containmentFolder":     "./api",
@@ -72,7 +68,6 @@ exhale_args = {
         EXAMPLE_PATH = ../test"
     ''')
 }
-
 
 # -- Language configuration --------------------------------------------------
 

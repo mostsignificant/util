@@ -4,7 +4,7 @@
  *
  * MIT License
  *
- * Copyright (c) 2020 - 2021 Christian Göhring
+ * Copyright (c) 2020-2021 Christian Göhring
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -56,8 +56,7 @@ namespace util {
  * the requirements of Allocator. The behavior is undefined if
  * Allocator::value_type is not the same as T.
  */
-template <class T, class Compare = std::less<T>,
-          class Allocator = std::allocator<T>>
+template <class T, class Compare = std::less<T>, class Allocator = std::allocator<T>>
 class sorted_vector {
 public:
     using value_type = T;
@@ -70,26 +69,20 @@ public:
     using const_pointer = typename std::vector<T, Allocator>::const_pointer;
     using iterator = typename std::vector<T, Allocator>::iterator;
     using const_iterator = typename std::vector<T, Allocator>::const_iterator;
-    using reverse_iterator =
-        typename std::vector<T, Allocator>::reverse_iterator;
-    using const_reverse_iterator =
-        typename std::vector<T, Allocator>::const_reverse_iterator;
+    using reverse_iterator = typename std::vector<T, Allocator>::reverse_iterator;
+    using const_reverse_iterator = typename std::vector<T, Allocator>::const_reverse_iterator;
 
     sorted_vector() noexcept;
     explicit sorted_vector(const Allocator& alloc) noexcept;
-    sorted_vector(size_type count, const T& value,
-                  const Allocator& alloc = Allocator());
-    explicit sorted_vector(size_type count,
-                           const Allocator& alloc = Allocator());
+    sorted_vector(size_type count, const T& value, const Allocator& alloc = Allocator());
+    explicit sorted_vector(size_type count, const Allocator& alloc = Allocator());
     template <class InputIt>
-    sorted_vector(InputIt begin, InputIt end,
-                  const Allocator& alloc = Allocator());
+    sorted_vector(InputIt begin, InputIt end, const Allocator& alloc = Allocator());
     sorted_vector(const sorted_vector& other);
     sorted_vector(const sorted_vector& other, const Allocator& alloc);
     sorted_vector(sorted_vector&& other) noexcept;
     sorted_vector(sorted_vector&& other, const Allocator& alloc);
-    sorted_vector(std::initializer_list<T> ilist,
-                  const Allocator& alloc = Allocator());
+    sorted_vector(std::initializer_list<T> ilist, const Allocator& alloc = Allocator());
 
     // element access
 
@@ -152,31 +145,25 @@ private:
 };
 
 template <class InputIt,
-          class Compare =
-              std::less<typename std::iterator_traits<InputIt>::value_type>,
-          class Alloc = std::allocator<
-              typename std::iterator_traits<InputIt>::value_type>>
+          class Compare = std::less<typename std::iterator_traits<InputIt>::value_type>,
+          class Alloc = std::allocator<typename std::iterator_traits<InputIt>::value_type>>
 sorted_vector(InputIt, InputIt, Alloc = Alloc())
-    -> sorted_vector<typename std::iterator_traits<InputIt>::value_type,
-                     Compare, Alloc>;
+    -> sorted_vector<typename std::iterator_traits<InputIt>::value_type, Compare, Alloc>;
 
 template <class T, class Compare, class Allocator>
 sorted_vector<T, Compare, Allocator>::sorted_vector() noexcept {}
 
 template <class T, class Compare, class Allocator>
-sorted_vector<T, Compare, Allocator>::sorted_vector(
-    const Allocator& alloc) noexcept
+sorted_vector<T, Compare, Allocator>::sorted_vector(const Allocator& alloc) noexcept
     : _elements(alloc) {}
 
 template <class T, class Compare, class Allocator>
-sorted_vector<T, Compare, Allocator>::sorted_vector(size_type count,
-                                                    const T& value,
+sorted_vector<T, Compare, Allocator>::sorted_vector(size_type count, const T& value,
                                                     const Allocator& alloc)
     : _elements(count, value, alloc) {}
 
 template <class T, class Compare, class Allocator>
-sorted_vector<T, Compare, Allocator>::sorted_vector(size_type count,
-                                                    const Allocator& alloc)
+sorted_vector<T, Compare, Allocator>::sorted_vector(size_type count, const Allocator& alloc)
     : _elements(count, alloc) {}
 
 template <class T, class Compare, class Allocator>
@@ -188,13 +175,13 @@ sorted_vector<T, Compare, Allocator>::sorted_vector(InputIt begin, InputIt end,
 }
 
 template <class T, class Compare, class Allocator>
-sorted_vector<T, Compare, Allocator>::sorted_vector(
-    std::initializer_list<T> ilist, const Allocator& alloc)
+sorted_vector<T, Compare, Allocator>::sorted_vector(std::initializer_list<T> ilist,
+                                                    const Allocator& alloc)
     : sorted_vector(std::begin(ilist), std::end(ilist), alloc) {}
 
 template <class T, class Compare, class Allocator>
-typename sorted_vector<T, Compare, Allocator>::reference
-sorted_vector<T, Compare, Allocator>::at(size_type pos) {
+typename sorted_vector<T, Compare, Allocator>::reference sorted_vector<T, Compare, Allocator>::at(
+    size_type pos) {
     return const_cast<typename sorted_vector<T, Compare, Allocator>::reference>(
         const_cast<const sorted_vector<T, Compare, Allocator>*>(this)->at(pos));
 }
@@ -209,8 +196,7 @@ template <class T, class Compare, class Allocator>
 typename sorted_vector<T, Compare, Allocator>::reference
 sorted_vector<T, Compare, Allocator>::operator[](size_type pos) {
     return const_cast<typename sorted_vector<T, Compare, Allocator>::reference>(
-        const_cast<const sorted_vector<T, Compare, Allocator>*>(this)->
-        operator[](pos));
+        const_cast<const sorted_vector<T, Compare, Allocator>*>(this)->operator[](pos));
 }
 
 template <class T, class Compare, class Allocator>
@@ -247,8 +233,7 @@ sorted_vector<T, Compare, Allocator>::back() const {
 
 template <class T, class Compare, class Allocator>
 T* sorted_vector<T, Compare, Allocator>::data() noexcept {
-    return const_cast<T*>(
-        const_cast<const sorted_vector<T, Compare, Allocator>*>(this)->data());
+    return const_cast<T*>(const_cast<const sorted_vector<T, Compare, Allocator>*>(this)->data());
 }
 
 template <class T, class Compare, class Allocator>
@@ -307,8 +292,7 @@ void sorted_vector<T, Compare, Allocator>::clear() noexcept {
 template <class T, class Compare, class Allocator>
 typename sorted_vector<T, Compare, Allocator>::iterator
 sorted_vector<T, Compare, Allocator>::insert(const T& value) {
-    return _elements.insert(
-        std::lower_bound(_elements.begin(), _elements.end()), value, comp);
+    return _elements.insert(std::lower_bound(_elements.begin(), _elements.end()), value, comp);
 }
 
 /**
@@ -317,9 +301,9 @@ sorted_vector<T, Compare, Allocator>::insert(const T& value) {
 template <class T, class Compare, class Allocator>
 typename sorted_vector<T, Compare, Allocator>::iterator
 sorted_vector<T, Compare, Allocator>::insert(T&& value) {
-    return _elements.insert(std::lower_bound(_elements.begin(), _elements.end(),
-                                             std::move(value), comp),
-                            std::move(value));
+    return _elements.insert(
+        std::lower_bound(_elements.begin(), _elements.end(), std::move(value), comp),
+        std::move(value));
 }
 
 }  // namespace util

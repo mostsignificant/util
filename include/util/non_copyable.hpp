@@ -25,18 +25,23 @@
  * IN THE SOFTWARE.
  */
 
-#ifndef THAT_THIS_UTIL_SHARED_HEADER_IS_ALREADY_INCLUDED
-#define THAT_THIS_UTIL_SHARED_HEADER_IS_ALREADY_INCLUDED
+#ifndef THAT_THIS_UTIL_NON_COPYABLE_HEADER_IS_ALREADY_INCLUDED
+#define THAT_THIS_UTIL_NON_COPYABLE_HEADER_IS_ALREADY_INCLUDED
 
 namespace util {
 
-template <class T>
-class shared {
+/**
+ * A helper class to make a class or struct non-copyable.
+ *
+ * This class can be derived from to make a class non-copyable in a more verbose way.
+ */
+// NOLINTNEXTLINE
+class non_copyable {
 public:
-private:
-    util::size_t ref_ = 0;
+    non_copyable(const non_copyable&) = delete;
+    auto operator=(const non_copyable&) -> non_copyable& = delete;
 };
 
 }  // namespace util
 
-#endif  // THAT_THIS_UTIL_SHARED_HEADER_IS_ALREADY_INCLUDED
+#endif  // THAT_THIS_UTIL_NON_COPYABLE_HEADER_IS_ALREADY_INCLUDED
