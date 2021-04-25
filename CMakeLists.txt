@@ -19,14 +19,6 @@ set(UTIL_VERSION             "${UTIL_VERSION_MAJOR}.${UTIL_VERSION_MINOR}.${UTIL
 set(UTIL_NAME_VERSION        "${UTIL_PROJECT_NAME} v${UTIL_VERSION}")
 
 ########################################################################################################################
-### PROJECT OPTIONS
-########################################################################################################################
-
-option(BUILD_SHARED_LIBS     "Build shared instead of static libraries." OFF)
-option(BUILD_TESTS           "Build tests."                              OFF)
-option(BUILD_DOCS            "Build documentation."                      OFF)
-
-########################################################################################################################
 ### PROJECT SETUP
 ########################################################################################################################
 
@@ -37,7 +29,19 @@ set(UTIL_INC_DIR ${PROJECT_SOURCE_DIR}/include)
 
 add_subdirectory(src)
 
+########################################################################################################################
+### PROJECT OPTIONS
+########################################################################################################################
+
+option(BUILD_TESTS "Build tests."         OFF)
+option(BUILD_DOCS  "Build documentation." OFF)
+
 if(BUILD_TESTS)
     enable_testing()
+    include(GoogleTest)
     add_subdirectory(test)
-endif()
+endif(BUILD_TESTS)
+
+if(BUILD_DOCS)
+    add_subdirectory(doc)
+endif(BUILD_DOCS)

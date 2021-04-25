@@ -1,4 +1,5 @@
 #include <string>
+
 #include "gtest/gtest.h"
 #include "test.hpp"
 #include "util/sorted_vector.hpp"
@@ -36,7 +37,8 @@ TEST(UtilSortedVector, Size) {
     util::sorted_vector<std::string> names;
     assert(names.size() == 0);
     names.insert("Chris");
-    assert(names.size() == 1);
+    names.insert("Dora");
+    assert(names.size() == 2);
     //! [sorted_vector_size]
 }
 

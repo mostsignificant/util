@@ -1,3 +1,30 @@
+/*
+ * util - a collection of utility classes and functions for C++
+ * <https://github.com/mostsignificant/util>
+ *
+ * MIT License
+ *
+ * Copyright (c) 2020 - 2021 Christian Göhring
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a
+ * copy of this software and associated documentation files (the "Software"),
+ * to deal in the Software without restriction, including without limitation
+ * the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the
+ * Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+ * OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+ * IN THE SOFTWARE.
+ */
+
 #ifndef THAT_THIS_UTIL_RING_BUFFER_HEADER_IS_ALREADY_INCLUDED
 #define THAT_THIS_UTIL_RING_BUFFER_HEADER_IS_ALREADY_INCLUDED
 
@@ -68,34 +95,42 @@ private:
 };
 
 template <typename T, util::size_t N>
-constexpr typename ring_buffer<T, N>::reference ring_buffer<T, N>::at(size_type pos) {
-    return const_cast<reference>(const_cast<const ring_buffer<T, N>*>(this)->at(pos));
+constexpr typename ring_buffer<T, N>::reference ring_buffer<T, N>::at(
+    size_type pos) {
+    return const_cast<reference>(
+        const_cast<const ring_buffer<T, N>*>(this)->at(pos));
 }
 
 template <typename T, util::size_t N>
-constexpr typename ring_buffer<T, N>::const_reference ring_buffer<T, N>::at(size_type pos) const {
+constexpr typename ring_buffer<T, N>::const_reference ring_buffer<T, N>::at(
+    size_type pos) const {
     if (!(pos < size())) throw util::out_of_range{"pos is out of range"};
 
     return elements_[pos];
 }
 
 template <typename T, util::size_t N>
-constexpr typename ring_buffer<T, N>::reference ring_buffer<T, N>::operator[](size_type pos) {
-    return const_cast<reference>(const_cast<const ring_buffer<T, N>*>(this)->operator[](pos));
+constexpr typename ring_buffer<T, N>::reference ring_buffer<T, N>::operator[](
+    size_type pos) {
+    return const_cast<reference>(
+        const_cast<const ring_buffer<T, N>*>(this)->operator[](pos));
 }
 
 template <typename T, util::size_t N>
-constexpr typename ring_buffer<T, N>::const_reference ring_buffer<T, N>::operator[](size_type pos) const {
+constexpr typename ring_buffer<T, N>::const_reference
+ring_buffer<T, N>::operator[](size_type pos) const {
     return elements_[pos];
 }
 
 template <typename T, util::size_t N>
 constexpr typename ring_buffer<T, N>::reference ring_buffer<T, N>::front() {
-    return const_cast<reference>(const_cast<const ring_buffer<T, N>*>(this)->front());
+    return const_cast<reference>(
+        const_cast<const ring_buffer<T, N>*>(this)->front());
 }
 
 template <typename T, util::size_t N>
-constexpr typename ring_buffer<T, N>::const_reference ring_buffer<T, N>::front() const {
+constexpr typename ring_buffer<T, N>::const_reference ring_buffer<T, N>::front()
+    const {
     if (full_ && pos_ < size() - 1) return elements_[pos_ + 1];
 
     return elements_[0];
@@ -103,21 +138,26 @@ constexpr typename ring_buffer<T, N>::const_reference ring_buffer<T, N>::front()
 
 template <typename T, util::size_t N>
 constexpr typename ring_buffer<T, N>::reference ring_buffer<T, N>::back() {
-    return const_cast<reference>(const_cast<const ring_buffer<T, N>*>(this)->back());
+    return const_cast<reference>(
+        const_cast<const ring_buffer<T, N>*>(this)->back());
 }
 
 template <typename T, util::size_t N>
-constexpr typename ring_buffer<T, N>::const_reference ring_buffer<T, N>::back() const {
+constexpr typename ring_buffer<T, N>::const_reference ring_buffer<T, N>::back()
+    const {
     return elements_[pos_];
 }
 
 template <typename T, util::size_t N>
-constexpr typename ring_buffer<T, N>::pointer ring_buffer<T, N>::data() noexcept {
-    return const_cast<pointer>(const_cast<const ring_buffer<T, N>*>(this)->data());
+constexpr typename ring_buffer<T, N>::pointer
+ring_buffer<T, N>::data() noexcept {
+    return const_cast<pointer>(
+        const_cast<const ring_buffer<T, N>*>(this)->data());
 }
 
 template <typename T, util::size_t N>
-constexpr typename ring_buffer<T, N>::const_pointer ring_buffer<T, N>::data() const noexcept {
+constexpr typename ring_buffer<T, N>::const_pointer ring_buffer<T, N>::data()
+    const noexcept {
     return &elements_[0];
 }
 
@@ -127,12 +167,14 @@ constexpr bool ring_buffer<T, N>::empty() const noexcept {
 }
 
 template <typename T, util::size_t N>
-constexpr typename ring_buffer<T, N>::size_type ring_buffer<T, N>::size() const noexcept {
+constexpr typename ring_buffer<T, N>::size_type ring_buffer<T, N>::size()
+    const noexcept {
     return full_ ? N : pos_;
 }
 
 template <typename T, util::size_t N>
-constexpr typename ring_buffer<T, N>::size_type ring_buffer<T, N>::max_size() const noexcept {
+constexpr typename ring_buffer<T, N>::size_type ring_buffer<T, N>::max_size()
+    const noexcept {
     return N;
 }
 

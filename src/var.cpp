@@ -4,7 +4,7 @@
  *
  * MIT License
  *
- * Copyright (c) 2018 Christian Göhring
+ * Copyright (c) 2020 - 2021 Christian Göhring
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -25,18 +25,4 @@
  * IN THE SOFTWARE.
  */
 
-#pragma once
-
-#undef assert
-
-namespace util {
-
-void assert(bool condition);
-
-class assert_exception {};
-
-}  // namespace util
-
-util::assert(bool condition) {
-    if (!condition) throw assert_exception();
-}
+#include <util/var.hpp>

@@ -4,7 +4,7 @@
  *
  * MIT License
  *
- * Copyright (c) 2020 Christian Göhring
+ * Copyright (c) 2020 - 2021 Christian Göhring
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -25,15 +25,16 @@
  * IN THE SOFTWARE.
  */
 
-#pragma once
+#ifndef THAT_THIS_UTIL_SCOPED_HEADER_IS_ALREADY_INCLUDED
+#define THAT_THIS_UTIL_SCOPED_HEADER_IS_ALREADY_INCLUDED
 
 namespace util {
 
 /**
- * A simple class for managing heap memory within a certain scope.
+ * A class for managing heap memory within a certain scope.
  *
  * @code{.cpp}
- * util::scoped number = new int(100);
+ * util::scoped number(new int(100));
  * @endcode
  */
 template <class T>
@@ -43,10 +44,12 @@ public:
     using pointer = element_type*;
     using reference = element_type&;
 
-    explicit scoped(pointer ptr) noexcept;
+    explicit scoped(pointer ptr = nullptr) noexcept;
     ~scoped();
 
-    constexpr scoped() noexcept = default;
+    scoped(scoped&& other);
+    scoped& operator=(scoped&& other);
+
     scoped(const scoped&) = delete;
     scoped& operator=(const scoped&) = delete;
 
@@ -60,74 +63,91 @@ public:
     pointer get() const noexcept;
 
 private:
-    pointer ptr = nullptr;
+    pointer ptr_ = nullptr;
 };
 
-#if defined(UTIL_USE_EXCEPTIONS)
+template <class T>
+scoped<T> make_scoped();
+
+#if UTIL_USE_EXCEPTIONS
 class scoped_nullptr_exception {};
 #endif
 
 }  // namespace util
 
-#if defined(UTIL_ASSERT)
-#include "util/assert.hpp"
+#if UTIL_ASSERT
+#include <util.hpp>
 #endif
 
+/**
+ * Constructs a scoped pointer from given memory.
+ *
+ * @
+ */
 template <class T>
-util::scoped<T>::scoped(pointer ptr) noexcept : ptr(ptr) {}
+util::scoped<T>::scoped(pointer ptr) noexcept : ptr_(ptr) {}
 
 template <class T>
 util::scoped<T>::~scoped() {
-    if (ptr) delete ptr;
+    if (ptr_) delete ptr_;
 }
 
 template <class T>
 typename util::scoped<T>::reference util::scoped<T>::operator*() const {
-#if defined(UTIL_USE_EXCEPTIONS)
-    if (!ptr) throw scoped_nullptr_exception();
-#elif defined(UTIL_ASSERT)
-    util::assert(ptr);
+#if defined UTIL_USE_EXCEPTIONS
+    if (!ptr_) throw scoped_nullptr_exception();
+#elif defined UTIL_USE_ASSERTIONS
+    util::assert(ptr_);
 #endif
-    return *ptr;
+
+    return *ptr_;
 }
 
 template <class T>
 typename util::scoped<T>::pointer util::scoped<T>::operator->() const {
-#if defined(UTIL_USE_EXCEPTIONS)
-    if (!ptr) throw scoped_nullptr_exception();
+#if defined UTIL_USE_EXCEPTIONS
+    if (!ptr_) throw scoped_nullptr_exception();
+#elif defined UTIL_USE_ASSERTIONS
+    util::assert(ptr_);
 #endif
-    return ptr;
+
+    return ptr_;
 }
 
 template <class T>
 util::scoped<T>::operator bool() const noexcept {
-    return ptr != nullptr;
+    return ptr_ != nullptr;
 }
 
 template <class T>
 typename util::scoped<T>::pointer util::scoped<T>::release() noexcept {
-    const auto tmp = ptr;
-    ptr = nullptr;
+    const auto tmp = ptr_;
+    ptr_ = nullptr;
     return tmp;
 }
 
 template <class T>
 void util::scoped<T>::reset(pointer ptr) noexcept {
-    if (this->ptr) delete this->ptr;
-    this->ptr = ptr;
+    if (ptr_) delete ptr_;
+    ptr_ = ptr;
 }
 
 template <class T>
 void util::scoped<T>::swap(scoped& other) noexcept {
-    const auto tmp = ptr;
-    ptr = other.ptr;
-    other.ptr = tmp;
+    const auto tmp = ptr_;
+    ptr_ = other.ptr_;
+    other.ptr_ = tmp;
 }
 
 template <class T>
 typename util::scoped<T>::pointer util::scoped<T>::get() const noexcept {
-#if defined(UTIL_USE_EXCEPTIONS)
-    if (!ptr) throw scoped_nullptr_exception();
+#if defined UTIL_USE_EXCEPTIONS
+    if (!ptr_) throw scoped_nullptr_exception();
+#elif defined UTIL_USE_ASSERTIONS
+    util::assert(ptr_);
 #endif
-    return ptr;
+
+    return ptr_;
 }
+
+#endif  // THAT_THIS_UTIL_SCOPED_HEADER_IS_ALREADY_INCLUDED

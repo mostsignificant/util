@@ -56,7 +56,8 @@ struct buffer_const_iterator;
  * @tparam Size the base part fixed size of the buffer
  * @tparam Allocator the allocator for the dynamic part of the buffer
  */
-template <class Type, std::size_t Size = 24, class Allocator = std::allocator<Type>>
+template <class Type, std::size_t Size = 24,
+          class Allocator = std::allocator<Type>>
 class buffer {
 public:
     using allocator_type = Allocator;
@@ -116,7 +117,8 @@ buffer<Type, Size, Allocator>::buffer(const std::initializer_list<Type>& list) {
  * @return the current number of elements in the buffer
  */
 template <class Type, std::size_t Size, class Allocator>
-typename buffer<Type, Size, Allocator>::size_type buffer<Type, Size, Allocator>::size() const noexcept {
+typename buffer<Type, Size, Allocator>::size_type
+buffer<Type, Size, Allocator>::size() const noexcept {
     return stack_position + heap.size();
 }
 
