@@ -12,7 +12,7 @@ enum root_permissions_flag {
 };
 using root_permissions = util::flags<root_permissions_flag>;
 
-const root_permissions rp{ read };
+const root_permissions read_only{ read };
 //! [flags_ctor]
 }
 

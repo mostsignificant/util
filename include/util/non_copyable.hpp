@@ -33,7 +33,9 @@ namespace util {
 /**
  * A helper class to make a class or struct non-copyable.
  *
- * This class can be derived from to make a class non-copyable in a more verbose way.
+ * This class can be derived from to make a class non-copyable in a verbose way.
+ *
+ * @snippet
  */
 // NOLINTNEXTLINE
 class non_copyable {

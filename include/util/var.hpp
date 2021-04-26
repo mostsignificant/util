@@ -46,7 +46,7 @@ namespace util {
  * The named types can only be constructed explicitly and used as parameters for functions to avoid
  * ambiguity errors.
  *
- * @snippet test/var.test.cpp var_using
+ * @snippet test/var.test.cpp var_ctor_default
  *
  * @tparam T the type of the contained value
  */

@@ -8,8 +8,8 @@ set(UTIL_INC_FILES
         ${UTIL_INC_DIR}/util/array.hpp
         ${UTIL_INC_DIR}/util/flags.hpp
         ${UTIL_INC_DIR}/util/multirator.hpp
-        ${UTIL_INC_DIR}/non_copyable.hpp
-        ${UTIL_INC_DIR}/non_moveable.hpp
+        ${UTIL_INC_DIR}/util/non_copyable.hpp
+        ${UTIL_INC_DIR}/util/non_moveable.hpp
         ${UTIL_INC_DIR}/util/ring_buffer.hpp
         ${UTIL_INC_DIR}/util/scoped.hpp
         ${UTIL_INC_DIR}/util/shared.hpp

@@ -22,7 +22,7 @@ assert(number);
 
 TEST(UtilScoped, CtorDefault) {
     const util::scoped<int> empty;
-    assert(empty);
+    assert(!empty);
 }
 
 TEST(UtilScoped, Dtor) {
