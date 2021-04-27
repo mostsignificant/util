@@ -16,6 +16,7 @@ matrix:
 ### LINUX + GCC ########################################################################################################
 
   - os: linux
+    dist: bionic
     compiler: gcc
     env: COMPILER=g++-10
     addons:
