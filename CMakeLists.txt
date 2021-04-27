@@ -2,7 +2,7 @@
 ### UTIL LIBRARY MAIN
 ########################################################################################################################
 
-cmake_minimum_required(VERSION 3.8)
+cmake_minimum_required(VERSION 3.15)
 
 ########################################################################################################################
 ### PROJECT DESCRIPTION
@@ -33,15 +33,15 @@ add_subdirectory(src)
 ### PROJECT OPTIONS
 ########################################################################################################################
 
-option(BUILD_TESTS "Build tests."         OFF)
 option(BUILD_DOCS  "Build documentation." OFF)
+option(BUILD_TESTS "Build tests."         OFF)
+
+if(BUILD_DOCS)
+    add_subdirectory(doc)
+endif(BUILD_DOCS)
 
 if(BUILD_TESTS)
     enable_testing()
     include(GoogleTest)
     add_subdirectory(test)
 endif(BUILD_TESTS)
-
-if(BUILD_DOCS)
-    add_subdirectory(doc)
-endif(BUILD_DOCS)

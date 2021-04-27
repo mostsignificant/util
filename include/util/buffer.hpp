@@ -4,7 +4,7 @@
  *
  * MIT License
  *
- * Copyright (c) 2018 Christian Göhring
+ * Copyright (c) 2020-2021 Christian Göhring
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -25,117 +25,210 @@
  * IN THE SOFTWARE.
  */
 
-#pragma once
+#ifndef THAT_THIS_UTIL_BUFFER_HEADER_IS_ALREADY_INCLUDED
+#define THAT_THIS_UTIL_BUFFER_HEADER_IS_ALREADY_INCLUDED
 
+#ifndef UTIL_NO_STD_LIBRARY
 #include <algorithm>
-#include <array>
-#include <memory>
+#include <stdexcept>
 #include <vector>
+namespace util {
+using std::allocator;
+using std::array;
+using std::back_inserter;
+using std::copy;
+using std::distance;
+using std::initializer_list;
+using std::out_of_range;
+using std::ptrdiff_t;
+using std::size_t;
+using std::vector;
+}  // namespace util
+#else
+#include <util.hpp>
+#endif  // UTIL_NO_STD_LIBRARY
 
 namespace util {
 
 namespace detail {
-
-template <class Type>
+template <class T>
 struct buffer_iterator;
-template <class Type>
+template <class T>
 struct buffer_const_iterator;
-
 }  // namespace detail
 
-/** @brief A buffer class with a fixed-size base storage and dynamic memory for
- * additional storage.
+/** @brief A buffer class with a fixed-size base storage and dynamic memory for additional storage.
  *
- * The buffer class is a container for values with a base fixed-size memory part
- * and additional dynamic part. This means that a number of values less than the
- * fixed-size parameter are stored on the stack and a number of values greater
- * than the fixed-size parameter are stored on the heap can can grow
- * dynamically.
+ * The buffer class is a container for values with a base fixed-size memory part and additional
+ * dynamic part. This means that a number of values less than the fixed-size parameter are stored on
+ * the stack and a number of values greater than the fixed-size parameter are stored on the heap can
+ * can grow dynamically.
  *
- * @tparam Type the type of values used in the buffer
- * @tparam Size the base part fixed size of the buffer
+ * @tparam T the type of values used in the buffer
+ * @tparam N the base part fixed size of the buffer
  * @tparam Allocator the allocator for the dynamic part of the buffer
  */
-template <class Type, std::size_t Size = 24,
-          class Allocator = std::allocator<Type>>
+template <class T, util::size_t N = 16, class Allocator = util::allocator<T>>
 class buffer {
 public:
     using allocator_type = Allocator;
-    using difference_type = std::ptrdiff_t;
-    using size_type = std::size_t;
-    using value_type = Type;
+    using difference_type = util::ptrdiff_t;
+    using size_type = util::size_t;
+    using value_type = T;
 
-    using iterator = detail::buffer_iterator<Type>;
-    using const_iterator = detail::buffer_const_iterator<Type>;
+    using iterator = detail::buffer_iterator<T>;
+    using const_iterator = detail::buffer_const_iterator<T>;
     using reference = value_type&;
     using const_reference = const value_type&;
     using pointer = value_type*;
     using const_pointer = const value_type* const;
 
-    buffer(const std::initializer_list<Type>& list);
+    buffer() = default;
+    ~buffer() = default;
+    buffer(const buffer&) = default;
+    buffer(buffer&&) noexcept = default;
+    auto operator=(const buffer&) -> buffer& = default;
+    auto operator=(buffer&&) noexcept -> buffer& = default;
 
-    bool empty() const noexcept;
-    size_type size() const noexcept;
+    buffer(const util::initializer_list<T>& list);
+
+    auto at(size_type pos) -> reference;
+    auto at(size_type pos) const -> const_reference;
+    auto operator[](size_type pos) -> reference;
+    auto operator[](size_type pos) const -> const_reference;
+    auto front() -> reference;
+    auto front() const -> const_reference;
+    auto back() -> reference;
+    auto back() const -> const_reference;
+    auto data() noexcept -> pointer;
+    auto data() const noexcept -> const_pointer;
+
+    auto begin() noexcept -> iterator;
+    auto begin() const noexcept -> const_iterator;
+    auto cbegin() const noexcept -> const_iterator;
+    auto end() noexcept -> iterator;
+    auto end() const noexcept -> const_iterator;
+    auto cend() const noexcept -> const_iterator;
+    auto rbegin() noexcept -> iterator;
+    auto rbegin() const noexcept -> const_iterator;
+    auto crbegin() const noexcept -> const_iterator;
+    auto rend() noexcept -> iterator;
+    auto rend() const noexcept -> const_iterator;
+    auto crend() const noexcept -> const_iterator;
+
+    auto empty() const noexcept -> bool;
+    auto size() const noexcept -> size_type;
+    auto max_size() const noexcept -> size_type;
+
+    void resize(size_type n, const value_type& val);
+    auto capacity() const noexcept -> size_type;
 
 private:
-    std::size_t stack_position = 0U;
-    std::array<Type, Size> stack;
-    std::vector<Type, Allocator> heap;
+    util::size_t stack_pos = 0U;
+    util::array<T, N> stack = {T()};
+    util::vector<T, Allocator> heap;
 };
 
-/** @brief Constructs a buffer object from an initializer list.
+/**
+ * Constructs a buffer object from an initializer list.
  *
- * @code{.cpp}
- *     const util::dat::buffer<int> numbers({1, 2, 3});
- *     assert(numbers.size() == 3);
- *     assert(numbers[0] == 1);
- * @endcode
+ * @snippet test/buffer.test.cpp buffer_ctor_initializer_list
  *
- * @param list A initializer list containing the initial elements for this
- * buffer
+ * @param list A initializer list containing the initial elements for this buffer
  */
-template <class Type, std::size_t Size, class Allocator>
-buffer<Type, Size, Allocator>::buffer(const std::initializer_list<Type>& list) {
-    if (list.size() <= Size) {
-        std::copy(list.begin(), list.end(), stack.begin());
-        stack_position = list.size();
+template <class T, util::size_t N, class Allocator>
+buffer<T, N, Allocator>::buffer(const util::initializer_list<T>& list) {
+    if (list.size() <= N) {
+        util::copy(list.begin(), list.end(), stack.begin());
+        stack_pos = list.size();
     } else {
-        std::copy(list.begin(), list.begin() + Size, stack.begin());
-        heap.reserve(std::distance(list.begin() + Size, list.end()));
-        std::copy(list.begin() + Size, list.end(), std::back_inserter(heap));
-        stack_position = Size;
+        util::copy(list.begin(), list.begin() + N, stack.begin());
+        heap.reserve(util::distance(list.begin() + N, list.end()));
+        util::copy(list.begin() + N, list.end(), util::back_inserter(heap));
+        stack_pos = N;
     }
 }
 
-/** @brief Returns the current number of elements in the buffer.
+/**
+ * Returns the element at the given position with boundary checking.
  *
- * @code{.cpp}
- *     const util::buffer<float> floaters({ 1.0f, 1.1f, 1.2f });
- *     assert(floaters.size() == 3);
- * @endcode
+ * @snippet test/buffer.test.cpp buffer_at
+ *
+ * @param pos the requested element's position
+ * @throw out_of_range if pos >= size()
+ * @return a reference to the requeste element
+ */
+template <class T, util::size_t N, class Allocator>
+auto buffer<T, N, Allocator>::at(size_type pos) -> reference {
+    // NOLINTNEXTLINE(cppcoreguidelines-pro-type-const-cast) @see Effective C++ by Scott Meyers
+    return const_cast<reference>(const_cast<const buffer<T, N, Allocator>*>(this)->at(pos));
+}
+
+/**
+ * @see auto buffer<T, N, Allocator>::at(size_type pos) -> reference
+ * @snippet test/buffer.test.cpp buffer_at_const
+ */
+template <class T, util::size_t N, class Allocator>
+auto buffer<T, N, Allocator>::at(size_type pos) const -> const_reference {
+    if (pos >= size()) {
+        throw util::out_of_range{"pos is out of range"};
+    }
+
+    if (pos < N) {
+        return stack.at(pos);
+    }
+    return heap.at(pos - N);
+}
+
+/**
+ * Returns the element at the given position without boundary checking.
+ *
+ * @snippet test/buffer.test.cpp buffer_operator_sqrbrckts
+ *
+ * @param pos the requested element's position
+ * @return a reference to the requeste element
+ */
+template <class T, util::size_t N, class Allocator>
+auto buffer<T, N, Allocator>::operator[](size_type pos) -> reference {
+    // NOLINTNEXTLINE(cppcoreguidelines-pro-type-const-cast) @see Effective C++ by Scott Meyers
+    return const_cast<reference>(const_cast<const buffer<T, N, Allocator>*>(this)->operator[](pos));
+}
+
+/**
+ * @see auto buffer<T, N, Allocator>::operator(size_type pos) -> reference
+ * @snippet test/buffer.test.cpp buffer_at_const
+ */
+template <class T, util::size_t N, class Allocator>
+auto buffer<T, N, Allocator>::operator[](size_type pos) const -> const_reference {
+    if (pos < N) {
+        return stack[pos];
+    }
+    return heap[pos - N];
+}
+
+/**
+ * Returns the current number of elements in the buffer (stack and heap).
  *
  * @return the current number of elements in the buffer
  */
-template <class Type, std::size_t Size, class Allocator>
-typename buffer<Type, Size, Allocator>::size_type
-buffer<Type, Size, Allocator>::size() const noexcept {
-    return stack_position + heap.size();
+template <class T, util::size_t N, class Allocator>
+auto buffer<T, N, Allocator>::size() const noexcept -> buffer<T, N, Allocator>::size_type {
+    if (stack_pos < N) {
+        return stack_pos;
+    }
+    return N + heap.size();
 }
 
-/** @brief Checks if the buffer has no elements.
- *
- * @code{.cpp}
- *     const util::buffer<double> doubles;
- *     assert(doubles.empty());
- *     doubles.push_back(1.0);
- *     assert(!doubles.empty());
- * @endcode
+/**
+ * Checks if the buffer has no elements.
  *
  * @return true if the buffer is empty, false otherwise
  */
-template <class Type, std::size_t Size, class Allocator>
-bool buffer<Type, Size, Allocator>::empty() const noexcept {
-    return stack_position == 0;
+template <class T, util::size_t N, class Allocator>
+auto buffer<T, N, Allocator>::empty() const noexcept -> bool {
+    return stack_pos == 0;
 }
 
 }  // namespace util
+
+#endif  // THAT_THIS_UTIL_BUFFER_HEADER_IS_ALREADY_INCLUDED

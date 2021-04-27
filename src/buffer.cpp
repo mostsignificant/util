@@ -25,43 +25,4 @@
  * IN THE SOFTWARE.
  */
 
-#ifndef THAT_THIS_UTIL_HEADER_FILE_IS_ALREADY_INCLUDED
-#define THAT_THIS_UTIL_HEADER_FILE_IS_ALREADY_INCLUDED
-
-#ifdef UTIL_NO_STD_LIBRARY
-namespace util {
-
-using int8 = char;
-using int16 = short;
-using int32 = int;
-using int64 = long long;
-using uint8 = unsigned char;
-using uint16 = unsigned short;
-using uint32 = unsigned int;
-using uint64 = unsigned long long;
-using size_t = unsigned long long;
-
-using ptrdiff_t = size_t;
-
-class exception {
-public:
-    virtual auto what() const noexcept -> const char* = 0;
-};
-
-class out_of_range : public exception {
-public:
-    explicit out_of_range(const char* msg) : message(msg) {}
-
-    const char* what() const noexcept override { return message; }
-
-private:
-    const char* message;
-};
-
-template <class T>
-struct initializer_list {};
-
-}  // namespace util
-#endif  // UTIL_NO_STD_LIBRARY
-
-#endif  // THAT_THIS_UTIL_HEADER_FILE_IS_ALREADY_INCLUDED
+#include <util/buffer.hpp>

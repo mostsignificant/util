@@ -6,6 +6,7 @@ set(UTIL_TARGET_NAME util)
 
 set(UTIL_INC_FILES
         ${UTIL_INC_DIR}/util/array.hpp
+        ${UTIL_INC_DIR}/util/buffer.hpp
         ${UTIL_INC_DIR}/util/flags.hpp
         ${UTIL_INC_DIR}/util/multirator.hpp
         ${UTIL_INC_DIR}/util/non_copyable.hpp
@@ -19,6 +20,7 @@ set(UTIL_INC_FILES
 
 set(UTIL_SRC_FILES
         ${UTIL_SRC_DIR}/array.cpp
+        ${UTIL_SRC_DIR}/buffer.cpp
         ${UTIL_SRC_DIR}/flags.cpp
         ${UTIL_SRC_DIR}/multirator.cpp
         ${UTIL_SRC_DIR}/non_copyable.cpp

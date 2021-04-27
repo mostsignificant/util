@@ -1,7 +1,7 @@
 #include "gtest/gtest.h"
 #include "util/non_copyable.hpp"
 
-TEST(UtilNonMoveable, Derive) {
+TEST(UtilNonCopyable, Derive) {
     class object : util::non_copyable {
         // ...
     };

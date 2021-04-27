@@ -4,6 +4,8 @@
 
 project(${UTIL_PROJECT_NAME}-test CXX)
 
+set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+
 macro(util_add_test TESTBASENAME)
     set(TESTNAME ${UTIL_PROJECT_NAME}-test-${TESTBASENAME})
     add_executable(${TESTNAME} ${ARGN})
@@ -43,6 +45,7 @@ set_target_properties(gmock_main PROPERTIES FOLDER extern)
 set(UTIL_TEST_DIR ${CMAKE_SOURCE_DIR}/test)
 
 util_add_test(array         ${UTIL_TEST_DIR}/array.test.cpp)
+util_add_test(buffer        ${UTIL_TEST_DIR}/buffer.test.cpp)
 util_add_test(flags         ${UTIL_TEST_DIR}/flags.test.cpp)
 util_add_test(multirator    ${UTIL_TEST_DIR}/multirator.test.cpp)
 util_add_test(non_copyable  ${UTIL_TEST_DIR}/non_copyable.test.cpp)
