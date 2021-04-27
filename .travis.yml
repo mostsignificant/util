@@ -31,8 +31,8 @@ matrix:
       - CXXFLAGS=-std=c++2a
     addons:
       apt:
-        sources: ['ubuntu-toolchain-r-test']
-        packages: ['g++-9']
+        sources: ['ubuntu-toolchain-r-test','kalakris-cmake']
+        packages: ['g++-9','cmake']
 
   - os: linux
     compiler: gcc
