@@ -185,7 +185,7 @@ auto buffer<T, N, Allocator>::at(size_type pos) const -> const_reference {
 /**
  * Returns the element at the given position without boundary checking.
  *
- * @snippet test/buffer.test.cpp buffer_operator_sqrbrckts
+ * @snippet test/buffer.test.cpp buffer_operator_square_brackets
  *
  * @param pos the requested element's position
  * @return a reference to the requeste element
@@ -198,7 +198,7 @@ auto buffer<T, N, Allocator>::operator[](size_type pos) -> reference {
 
 /**
  * @see auto buffer<T, N, Allocator>::operator(size_type pos) -> reference
- * @snippet test/buffer.test.cpp buffer_at_const
+ * @snippet test/buffer.test.cpp buffer_operator_square_brackets_const
  */
 template <class T, util::size_t N, class Allocator>
 auto buffer<T, N, Allocator>::operator[](size_type pos) const -> const_reference {
@@ -210,6 +210,8 @@ auto buffer<T, N, Allocator>::operator[](size_type pos) const -> const_reference
 
 /**
  * Returns the current number of elements in the buffer (stack and heap).
+ *
+ * @snippet test/buffer.test.cpp buffer_size
  *
  * @return the current number of elements in the buffer
  */

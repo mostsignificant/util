@@ -60,12 +60,35 @@ catch (const std::out_of_range& x) {
 
 TEST(UtilBuffer, OperatorSquareBrackets) {
 //! [buffer_operator_square_brackets]
-const util::buffer<int> numbers{1, 2, 3};
+util::buffer<int> numbers{1, 2, 3};
 assert(numbers[2] == 3);
 //! [buffer_operator_square_brackets]
 
 assert(numbers[0] == 1);
 assert(numbers[1] == 2);
+}
+
+TEST(UtilBuffer, OperatorSquareBracketsConst) {
+//! [buffer_operator_square_brackets_const]
+const util::buffer<int> numbers{1, 2, 3};
+assert(numbers[2] == 3);
+//! [buffer_operator_square_brackets_const]
+
+assert(numbers[0] == 1);
+assert(numbers[1] == 2);
+}
+
+TEST(UtilBuffer, Size) {
+//! [buffer_size]
+const util::buffer<int> numbers{1, 2, 3, 4, 5};
+assert(numbers.size() == 5);
+//! [buffer_size]
+
+const util::buffer<int> empty;
+assert(empty.size() == 0);
+
+const util::buffer<int, 2> stack_and_heap{1, 2, 3, 4, 5};
+assert(stack_and_heap.size() == 5);
 }
 
 // clang-format on
