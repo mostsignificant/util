@@ -30,6 +30,7 @@
 
 #ifndef UTIL_NO_STD_LIBRARY
 #include <algorithm>
+#include <array>
 #include <iterator>
 #include <stdexcept>
 #include <vector>
