@@ -223,7 +223,7 @@ buffer<T, N, Allocator>::buffer(const util::initializer_list<T>& list) {
  * @snippet test/buffer.test.cpp buffer_at
  * @param pos the requested element's position
  * @throw out_of_range if pos >= size()
- * @return a reference to the requeste element
+ * @return a reference to the requested element
  */
 template <class T, util::size_t N, class Allocator>
 auto buffer<T, N, Allocator>::at(size_type pos) -> reference {

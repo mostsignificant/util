@@ -127,12 +127,24 @@ constexpr auto get(const array<T, N>& a) noexcept -> const T&&;
 template <class T, class... U>
 array(T, U...) -> array<T, 1 + sizeof...(U)>;
 
+/**
+ * Returns the element at the given position with boundary checking.
+ *
+ * @snippet test/array.test.cpp array_at
+ * @param pos the requested element's position
+ * @throw out_of_range if pos >= size()
+ * @return a reference to the requested element
+ */
 template <class T, util::size_t N>
 constexpr auto array<T, N>::at(size_type pos) -> array<T, N>::reference {
     // NOLINTNEXTLINE(cppcoreguidelines-pro-type-const-cast) @see Effective C++ by Scott Meyers
     return const_cast<reference>(const_cast<const array<T, N>*>(this)->at(pos));
 }
 
+/**
+ * @see auto array<T, N>::at(size_type pos) -> reference
+ * @snippet test/array.test.cpp array_at_const
+ */
 template <class T, util::size_t N>
 constexpr auto array<T, N>::at(size_type pos) const -> array<T, N>::const_reference {
     if (!(pos < size())) {
@@ -142,23 +154,44 @@ constexpr auto array<T, N>::at(size_type pos) const -> array<T, N>::const_refere
     return elements[pos];
 }
 
+/**
+ * Returns the element at the given position without boundary checking.
+ *
+ * @snippet test/array.test.cpp array_operator_square_brackets
+ * @param pos the requested element's position
+ * @return a reference to the requested element
+ */
 template <class T, util::size_t N>
 constexpr auto array<T, N>::operator[](size_type pos) -> array<T, N>::reference {
     // NOLINTNEXTLINE(cppcoreguidelines-pro-type-const-cast) @see Effective C++ by Scott Meyers
     return const_cast<reference>(const_cast<const array<T, N>*>(this)->operator[](pos));
 }
 
+/**
+ * @see auto array<T, N>::operator(size_type pos) -> reference
+ * @snippet test/array.test.cpp array_operator_square_brackets_const
+ */
 template <class T, util::size_t N>
 constexpr auto array<T, N>::operator[](size_type pos) const -> array<T, N>::const_reference {
     return elements[pos];
 }
 
+/**
+ * Returns a direct pointer to the memory used internally by the array.
+ *
+ * @snippet test/array.test.cpp array_data
+ * @return a pointer to the first element in the array used internally by the array
+ */
 template <class T, util::size_t N>
 constexpr auto array<T, N>::data() noexcept -> array<T, N>::pointer {
     // NOLINTNEXTLINE(cppcoreguidelines-pro-type-const-cast) @see Effective C++ by Scott Meyers
     return const_cast<pointer>(const_cast<const array<T, N>*>(this)->data());
 }
 
+/**
+ * @see auto array<T, N>::data -> pointer
+ * @snippet test/array.test.cpp array_const_data
+ */
 template <class T, util::size_t N>
 constexpr auto array<T, N>::data() const noexcept -> array<T, N>::const_pointer {
     return &elements[0];
@@ -189,7 +222,7 @@ constexpr auto array<T, N>::end() noexcept -> iterator {
 
 template <class T, util::size_t N>
 constexpr auto array<T, N>::end() const noexcept -> const_iterator {
-    return elements[N - 1];
+    return elements[N];
 }
 
 template <class T, util::size_t N>
