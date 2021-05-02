@@ -4,6 +4,14 @@
 
 project(${UTIL_PROJECT_NAME}-test CXX)
 
+if(MSVC)
+    add_compile_options(
+        $<$<CONFIG:>:/MT> #---------|
+        $<$<CONFIG:Debug>:/MTd> #---|-- Statically link the runtime libraries
+        $<$<CONFIG:Release>:/MT> #--|
+    )
+endif(MSVC)
+
 macro(util_add_test TESTBASENAME)
     set(TESTNAME ${UTIL_PROJECT_NAME}-test-${TESTBASENAME})
     add_executable(${TESTNAME} ${ARGN})
@@ -17,10 +25,7 @@ macro(util_add_test TESTBASENAME)
         PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
     )
 
-    set_target_properties(${TESTNAME} PROPERTIES 
-        FOLDER tests
-        MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>"
-    )
+    set_target_properties(${TESTNAME} PROPERTIES FOLDER tests)
 endmacro()
 
 ########################################################################################################################
