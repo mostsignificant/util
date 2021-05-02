@@ -78,6 +78,16 @@ assert(numbers[0] == 1);
 assert(numbers[1] == 2);
 }
 
+TEST(UtilBuffer, Empty) {
+//! [buffer_empty]
+const util::buffer<int> numbers;
+assert(numbers.empty());
+//! [buffer_empty]
+
+const util::buffer<int> non_empty{1, 2, 3, 4, 5};
+assert(!non_empty.empty());
+}
+
 TEST(UtilBuffer, Size) {
 //! [buffer_size]
 const util::buffer<int> numbers{1, 2, 3, 4, 5};
@@ -89,6 +99,13 @@ assert(empty.size() == 0);
 
 const util::buffer<int, 2> stack_and_heap{1, 2, 3, 4, 5};
 assert(stack_and_heap.size() == 5);
+}
+
+TEST(UtilBuffer, MaxSize) {
+//! [buffer_max_size]
+const util::buffer<int, 32> buf;
+assert(buf.max_size() > 32);
+//! [buffer_max_size]
 }
 
 // clang-format on

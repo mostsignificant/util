@@ -32,6 +32,7 @@
 #include <algorithm>
 #include <array>
 #include <iterator>
+#include <limits>
 #include <stdexcept>
 #include <vector>
 namespace util {
@@ -41,6 +42,7 @@ using std::back_inserter;
 using std::copy;
 using std::distance;
 using std::initializer_list;
+using std::numeric_limits;
 using std::out_of_range;
 using std::ptrdiff_t;
 using std::size_t;
@@ -209,6 +211,18 @@ auto buffer<T, N, Allocator>::operator[](size_type pos) const -> const_reference
 }
 
 /**
+ * Checks if the buffer has no elements.
+ *
+ * @snippet test/buffer.test.cpp buffer_empty
+ *
+ * @return true if the buffer is empty, false otherwise
+ */
+template <class T, util::size_t N, class Allocator>
+auto buffer<T, N, Allocator>::empty() const noexcept -> bool {
+    return stack_pos == 0;
+}
+
+/**
  * Returns the current number of elements in the buffer (stack and heap).
  *
  * @snippet test/buffer.test.cpp buffer_size
@@ -216,7 +230,7 @@ auto buffer<T, N, Allocator>::operator[](size_type pos) const -> const_reference
  * @return the current number of elements in the buffer
  */
 template <class T, util::size_t N, class Allocator>
-auto buffer<T, N, Allocator>::size() const noexcept -> buffer<T, N, Allocator>::size_type {
+auto buffer<T, N, Allocator>::size() const noexcept -> size_type {
     if (stack_pos < N) {
         return stack_pos;
     }
@@ -224,13 +238,15 @@ auto buffer<T, N, Allocator>::size() const noexcept -> buffer<T, N, Allocator>::
 }
 
 /**
- * Checks if the buffer has no elements.
+ * Returns the maximum number of elements the container is able to hold.
  *
- * @return true if the buffer is empty, false otherwise
+ * @snippet test/buffer.test.cpp buffer_size
+ *
+ * @return the current number of elements in the buffer
  */
 template <class T, util::size_t N, class Allocator>
-auto buffer<T, N, Allocator>::empty() const noexcept -> bool {
-    return stack_pos == 0;
+auto buffer<T, N, Allocator>::max_size() const noexcept -> size_type {
+    return N + util::numeric_limits<difference_type>::max();
 }
 
 }  // namespace util
