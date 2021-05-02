@@ -4,8 +4,6 @@
 
 project(${UTIL_PROJECT_NAME}-test CXX)
 
-set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
-
 macro(util_add_test TESTBASENAME)
     set(TESTNAME ${UTIL_PROJECT_NAME}-test-${TESTBASENAME})
     add_executable(${TESTNAME} ${ARGN})
@@ -20,6 +18,9 @@ macro(util_add_test TESTBASENAME)
     )
 
     set_target_properties(${TESTNAME} PROPERTIES FOLDER tests)
+
+    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT")
+    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MTd")
 endmacro()
 
 ########################################################################################################################
