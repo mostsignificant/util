@@ -1,6 +1,6 @@
 # util
 
-[![Travis](https://travis-ci.com/mostsignificant/util.svg?branch=master)](https://travis-ci.com/mostsignificant/util)
+[![CI](https://github.com/mostsignificant/util/actions/workflows/cmake.yml/badge.svg)](https://github.com/mostsignificant/util/actions/workflows/cmake.yml)
 [![Documentation](http://readthedocs.org/projects/mostsignificantutil/badge/?version=latest)](https://mostsignificantutil.readthedocs.io/en/latest/?badge=latest)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/mostsignificant/util/master/LICENSE.MIT)
 
