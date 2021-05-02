@@ -55,10 +55,8 @@ using std::vector;
 namespace util {
 
 namespace detail {
-template <class T>
-struct buffer_iterator;
-template <class T>
-struct buffer_const_iterator;
+template <bool IsConst, class T, util::size_t N, class Allocator>
+class buffer_iterator;
 }  // namespace detail
 
 /** @brief A buffer class with a fixed-size base storage and dynamic memory for additional storage.
@@ -80,12 +78,12 @@ public:
     using size_type = util::size_t;
     using value_type = T;
 
-    using iterator = detail::buffer_iterator<T>;
-    using const_iterator = detail::buffer_const_iterator<T>;
+    using iterator = detail::buffer_iterator<false, T, N, Allocator>;
+    using const_iterator = detail::buffer_iterator<true, T, N, Allocator>;
     using reference = value_type&;
     using const_reference = const value_type&;
     using pointer = value_type*;
-    using const_pointer = const value_type* const;
+    using const_pointer = const value_type*;
 
     buffer() = default;
     ~buffer() = default;
@@ -104,8 +102,10 @@ public:
     auto front() const -> const_reference;
     auto back() -> reference;
     auto back() const -> const_reference;
-    auto data() noexcept -> pointer;
-    auto data() const noexcept -> const_pointer;
+    auto stack_data() noexcept -> pointer;
+    auto stack_data() const noexcept -> const_pointer;
+    auto heap_data() noexcept -> pointer;
+    auto heap_data() const noexcept -> const_pointer;
 
     auto begin() noexcept -> iterator;
     auto begin() const noexcept -> const_iterator;
@@ -128,16 +128,80 @@ public:
     auto capacity() const noexcept -> size_type;
 
 private:
-    util::size_t stack_pos = 0U;
-    util::array<T, N> stack = {T()};
-    util::vector<T, Allocator> heap;
+    util::size_t stack_pos = 0U;      // position of the next available slot on the stack
+    util::array<T, N> stack = {T()};  // fixed-size container of stack elements
+    util::vector<T, Allocator> heap;  // dynamically growing container of heap elements
 };
+
+namespace detail {
+
+/**
+ * An iterator class that holds a pointer to a buffer element.
+ */
+template <bool IsConst, class T, util::size_t N, class Allocator>
+class buffer_iterator {
+public:
+    using iterator_category = std::forward_iterator_tag;
+    using difference_type = util::ptrdiff_t;
+    using value_type = T;
+    using reference = typename std::conditional<IsConst, const value_type&, value_type&>::type;
+    using pointer = typename std::conditional<IsConst, const value_type*, value_type*>::type;
+    using buffer_type = util::buffer<T, N, Allocator>;
+    using buffer_pointer =
+        typename std::conditional<IsConst, const buffer_type*, buffer_type*>::type;
+    using size_type = typename buffer_type::size_type;
+
+    explicit buffer_iterator(size_type pos, const buffer_pointer& buffer_ptr) noexcept
+        : pos(pos), buffer_ptr(buffer_ptr) {}
+
+    auto operator*() const -> reference { return buffer_ptr->operator[](pos); }
+    auto operator->() -> pointer { return buffer_ptr->operator[](pos); }
+
+    /**
+     * Prefix increment of this iterator.
+     *
+     * @return a reference to this iterator after incrementing
+     */
+    auto operator++() -> buffer_iterator& {
+        pos++;
+        return *this;
+    }
+
+    /**
+     * Postfix increment of this iterator.
+     *
+     * @return a copy to this iterator before incrementing
+     */
+    auto operator++(int) -> buffer_iterator {
+        buffer_iterator tmp = *this;
+        ++(*this);
+        return tmp;
+    }
+
+    friend auto operator==(const buffer_iterator& lhs, const buffer_iterator& rhs) -> bool {
+        return lhs.pos == rhs.pos && lhs.buffer_ptr == rhs.buffer_ptr;
+    };
+    friend auto operator!=(const buffer_iterator& lhs, const buffer_iterator& rhs) -> bool {
+        return lhs.pos != rhs.pos || lhs.buffer_ptr != rhs.buffer_ptr;
+    };
+
+private:
+    size_type pos = 0;
+    buffer_pointer buffer_ptr;
+};
+
+// assert if a buffer_iterator is trivially copy constructible
+static_assert(std::is_trivially_copy_constructible<buffer<int>::iterator>::value, "");
+
+// assert if a buffer_const_iterator is trivially copy constructible
+static_assert(std::is_trivially_copy_constructible<buffer<int>::const_iterator>::value, "");
+
+}  // namespace detail
 
 /**
  * Constructs a buffer object from an initializer list.
  *
  * @snippet test/buffer.test.cpp buffer_ctor_initializer_list
- *
  * @param list A initializer list containing the initial elements for this buffer
  */
 template <class T, util::size_t N, class Allocator>
@@ -157,7 +221,6 @@ buffer<T, N, Allocator>::buffer(const util::initializer_list<T>& list) {
  * Returns the element at the given position with boundary checking.
  *
  * @snippet test/buffer.test.cpp buffer_at
- *
  * @param pos the requested element's position
  * @throw out_of_range if pos >= size()
  * @return a reference to the requeste element
@@ -188,9 +251,8 @@ auto buffer<T, N, Allocator>::at(size_type pos) const -> const_reference {
  * Returns the element at the given position without boundary checking.
  *
  * @snippet test/buffer.test.cpp buffer_operator_square_brackets
- *
  * @param pos the requested element's position
- * @return a reference to the requeste element
+ * @return a reference to the requested element
  */
 template <class T, util::size_t N, class Allocator>
 auto buffer<T, N, Allocator>::operator[](size_type pos) -> reference {
@@ -211,10 +273,162 @@ auto buffer<T, N, Allocator>::operator[](size_type pos) const -> const_reference
 }
 
 /**
+ * Returns the first element from the buffer. Undefined behaviour if the buffer is empty.
+ *
+ * @snippet test/buffer.test.cpp buffer_front
+ * @return a reference to the first element in the buffer
+ */
+template <class T, util::size_t N, class Allocator>
+auto buffer<T, N, Allocator>::front() -> reference {
+    // NOLINTNEXTLINE(cppcoreguidelines-pro-type-const-cast) @see Effective C++ by Scott Meyers
+    return const_cast<reference>(const_cast<const buffer<T, N, Allocator>*>(this)->front());
+}
+
+/**
+ * @see auto buffer<T, N, Allocator>::front -> reference
+ * @snippet test/buffer.test.cpp buffer_front_const
+ */
+template <class T, util::size_t N, class Allocator>
+auto buffer<T, N, Allocator>::front() const -> const_reference {
+    return stack[0];
+}
+
+/**
+ * Returns the last element from the buffer. Undefined behaviour if the buffer is empty.
+ *
+ * @snippet test/buffer.test.cpp buffer_back
+ * @return a reference to the last element in the buffer
+ */
+template <class T, util::size_t N, class Allocator>
+auto buffer<T, N, Allocator>::back() -> reference {
+    // NOLINTNEXTLINE(cppcoreguidelines-pro-type-const-cast) @see Effective C++ by Scott Meyers
+    return const_cast<reference>(const_cast<const buffer<T, N, Allocator>*>(this)->back());
+}
+
+/**
+ * @see auto buffer<T, N, Allocator>::back -> reference
+ * @snippet test/buffer.test.cpp buffer_back_const
+ */
+template <class T, util::size_t N, class Allocator>
+auto buffer<T, N, Allocator>::back() const -> const_reference {
+    if (stack_pos == N) {
+        return heap.back();
+    }
+
+    return stack[stack_pos - 1];
+}
+
+/**
+ * Returns a direct pointer to the memory used internally by the buffer to store its stack elements.
+ *
+ * @snippet test/buffer.test.cpp buffer_stack_data
+ * @return a pointer to the first stack element in the array used internally by the buffer
+ */
+template <class T, util::size_t N, class Allocator>
+auto buffer<T, N, Allocator>::stack_data() noexcept -> pointer {
+    // NOLINTNEXTLINE(cppcoreguidelines-pro-type-const-cast) @see Effective C++ by Scott Meyers
+    return const_cast<pointer>(const_cast<const buffer<T, N, Allocator>*>(this)->stack_data());
+}
+
+/**
+ * @see auto buffer<T, N, Allocator>::stack_data -> pointer
+ * @snippet test/buffer.test.cpp buffer_stack_data_const
+ */
+template <class T, util::size_t N, class Allocator>
+auto buffer<T, N, Allocator>::stack_data() const noexcept -> const_pointer {
+    return stack.data();
+}
+
+/**
+ * Returns a direct pointer to the memory used internally by the buffer to store its heap elements.
+ *
+ * @snippet test/buffer.test.cpp buffer_heap_data
+ * @return a pointer to the first heap element in the array used internally by the buffer
+ */
+template <class T, util::size_t N, class Allocator>
+auto buffer<T, N, Allocator>::heap_data() noexcept -> pointer {
+    // NOLINTNEXTLINE(cppcoreguidelines-pro-type-const-cast) @see Effective C++ by Scott Meyers
+    return const_cast<pointer>(const_cast<const buffer<T, N, Allocator>*>(this)->heap_data());
+}
+
+/**
+ * @see auto buffer<T, N, Allocator>::heap_data -> pointer
+ * @snippet test/buffer.test.cpp buffer_heap_data_const
+ */
+template <class T, util::size_t N, class Allocator>
+auto buffer<T, N, Allocator>::heap_data() const noexcept -> const_pointer {
+    return heap.data();
+}
+
+/**
+ * Returns an iterator to the first element of the buffer. If the buffer is empty, the returned
+ * iterator will be equal to end().
+ *
+ * @snippet an iterator to the first element
+ * @return an iterator to the first element
+ */
+template <class T, util::size_t N, class Allocator>
+auto buffer<T, N, Allocator>::begin() noexcept -> iterator {
+    return iterator(0, this);
+}
+
+/**
+ * @see auto buffer<T, N, Allocator>::begin -> iterator
+ * @snippet test/buffer.test.cpp buffer_begin_const
+ */
+template <class T, util::size_t N, class Allocator>
+auto buffer<T, N, Allocator>::begin() const noexcept -> const_iterator {
+    return const_iterator(0, this);
+}
+
+/**
+ * Returns a const_iterator to the first element of the buffer.
+ *
+ * @snippet test/buffer.test.cpp buffer_cbegin
+ * @return a const_iterator to the first element
+ */
+template <class T, util::size_t N, class Allocator>
+auto buffer<T, N, Allocator>::cbegin() const noexcept -> const_iterator {
+    // NOLINTNEXTLINE(cppcoreguidelines-pro-type-const-cast) calls similar const-method
+    return const_cast<const buffer*>(this)->begin();
+}
+
+/**
+ * Returns an iterator to the element past the last element of the buffer.
+ *
+ * @snippet test/buffer.test.cpp buffer_end
+ * @return an iterator to the position past the last element
+ */
+template <class T, util::size_t N, class Allocator>
+auto buffer<T, N, Allocator>::end() noexcept -> iterator {
+    return iterator(size(), this);
+}
+
+/**
+ * @see auto buffer<T, N, Allocator>::end -> iterator
+ * @snippet test/buffer.test.cpp buffer_end_const
+ */
+template <class T, util::size_t N, class Allocator>
+auto buffer<T, N, Allocator>::end() const noexcept -> const_iterator {
+    return const_iterator(size(), this);
+}
+
+/**
+ * Returns a const_iterator to the element past the last element of the buffer.
+ *
+ * @snippet test/buffer.test.cpp buffer_cend
+ * @return an iterator to the position past the last element
+ */
+template <class T, util::size_t N, class Allocator>
+auto buffer<T, N, Allocator>::cend() const noexcept -> const_iterator {
+    // NOLINTNEXTLINE(cppcoreguidelines-pro-type-const-cast) calls similar const-method
+    return const_cast<const buffer*>(this)->end();
+}
+
+/**
  * Checks if the buffer has no elements.
  *
  * @snippet test/buffer.test.cpp buffer_empty
- *
  * @return true if the buffer is empty, false otherwise
  */
 template <class T, util::size_t N, class Allocator>
@@ -226,7 +440,6 @@ auto buffer<T, N, Allocator>::empty() const noexcept -> bool {
  * Returns the current number of elements in the buffer (stack and heap).
  *
  * @snippet test/buffer.test.cpp buffer_size
- *
  * @return the current number of elements in the buffer
  */
 template <class T, util::size_t N, class Allocator>
@@ -241,12 +454,11 @@ auto buffer<T, N, Allocator>::size() const noexcept -> size_type {
  * Returns the maximum number of elements the container is able to hold.
  *
  * @snippet test/buffer.test.cpp buffer_size
- *
  * @return the current number of elements in the buffer
  */
 template <class T, util::size_t N, class Allocator>
 auto buffer<T, N, Allocator>::max_size() const noexcept -> size_type {
-    return N + util::numeric_limits<difference_type>::max();
+    return stack.max_size() + heap.max_size();
 }
 
 }  // namespace util
