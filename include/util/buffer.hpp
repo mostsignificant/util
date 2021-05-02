@@ -30,6 +30,7 @@
 
 #ifndef UTIL_NO_STD_LIBRARY
 #include <algorithm>
+#include <iterator>
 #include <stdexcept>
 #include <vector>
 namespace util {
