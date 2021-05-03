@@ -69,10 +69,6 @@ private:
 template <class T>
 scoped<T> make_scoped();
 
-#if UTIL_USE_EXCEPTIONS
-class scoped_nullptr_exception {};
-#endif
-
 }  // namespace util
 
 #if UTIL_ASSERT

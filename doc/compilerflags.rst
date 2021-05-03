@@ -10,8 +10,8 @@ UTIL_NO_STD_LIBRARY
 This flag allows the use of the util library without any C++ standard library dependencies. This might come in handy in
 environments without C++ standard library or other restrictions.
 
-UTIL_THROW_ASSERTIONS
----------------------
+UTIL_ASSERT
+-----------
 
 This compiler flags enables the throwing of a util::assertion on certain functions, for example accessing a nullptr. The
 corresponding function's documentation describes explicitly if it throws an assertion. This feature is useful for

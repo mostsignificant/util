@@ -25,4 +25,4 @@
  * IN THE SOFTWARE.
  */
 
-#include "util/sorted_vector.hpp"
+#include "util/sorted.hpp"

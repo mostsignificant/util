@@ -14,7 +14,7 @@ set(UTIL_INC_FILES
         ${UTIL_INC_DIR}/util/ring_buffer.hpp
         ${UTIL_INC_DIR}/util/scoped.hpp
         ${UTIL_INC_DIR}/util/shared.hpp
-        ${UTIL_INC_DIR}/util/sorted_vector.hpp
+        ${UTIL_INC_DIR}/util/sorted.hpp
         ${UTIL_INC_DIR}/util/var.hpp
 )
 
@@ -28,7 +28,7 @@ set(UTIL_SRC_FILES
         ${UTIL_SRC_DIR}/ring_buffer.cpp
         ${UTIL_SRC_DIR}/scoped.cpp
         ${UTIL_SRC_DIR}/shared.cpp
-        ${UTIL_SRC_DIR}/sorted_vector.cpp
+        ${UTIL_SRC_DIR}/sorted.cpp
         ${UTIL_SRC_DIR}/var.cpp
 )
 

@@ -58,10 +58,10 @@ assert(*numbers.data() == 1);
 }
 
 TEST(UtilArray, ConstData) {
-//! [array_data]
+//! [array_const_data]
 constexpr const util::array<int, 3> numbers{1, 2, 3};
 assert(*numbers.data() == 1);
-//! [array_data]
+//! [array_const_data]
 }
 
 // clang-format on

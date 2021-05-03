@@ -10,14 +10,27 @@ without additional setup.
 
 ## Features
 
+### Data structures
+
 - util::array
 - util::buffer
+- util::list
+- util::ring_buffer
+- util::vector
+
+### Utilities
+
 - util::flags
 - util::non_copyable and util::non_moveable
-- util::ring_buffer
-- util::scoped, util::shared
-- util::sorted_vector
+- util::sorted with util::sorted_vector, util::sorted_list etc.
 - util::var
+
+### Memory management
+
+- util::guarded
+- util::object
+- util::scoped
+- util::shared
 
 ## Usage
 

@@ -45,23 +45,38 @@ using ptrdiff_t = size_t;
 
 class exception {
 public:
-    virtual auto what() const noexcept -> const char* = 0;
-};
-
-class out_of_range : public exception {
-public:
-    explicit out_of_range(const char* msg) : message(msg) {}
-
-    const char* what() const noexcept override { return message; }
+    explicit exception(const char* msg) : message(msg) {}
+    auto what() const noexcept -> const char* { return message; };
 
 private:
     const char* message;
 };
 
-template <class T>
-struct initializer_list {};
+class out_of_range : public exception {
+public:
+    explicit out_of_range(const char* msg) : exception(msg) {}
+};
 
 }  // namespace util
 #endif  // UTIL_NO_STD_LIBRARY
+
+#ifdef UTIL_ASSERT
+namespace util {
+
+struct placeholder {};
+
+class assertion : public exception {
+public:
+    explicit assertion(const char* msg) : exception(msg) {}
+};
+
+#define assert(condition)                                 \
+    placeholder{};                                        \
+    if (!condition) {                                     \
+        throw assertion{"assertion failed: ##condition"}; \
+    }
+
+}  // namespace util
+#endif  // UTIL_ASSERT
 
 #endif  // THAT_THIS_UTIL_HEADER_FILE_IS_ALREADY_INCLUDED
