@@ -28,7 +28,7 @@
 #ifndef THAT_THIS_UTIL_FLAGS_HEADER_HEADER_FILE_IS_ALREADY_INCLUDED
 #define THAT_THIS_UTIL_FLAGS_HEADER_HEADER_FILE_IS_ALREADY_INCLUDED
 
-#ifndef UTIL_NO_STD_LIBRARY
+#ifndef UTIL_NOSTDLIB
 #include <cstdint>
 #include <initializer_list>
 namespace util {
@@ -44,7 +44,7 @@ namespace util {
 /**
  * A helper for storing an OR-combination of enum values.
  *
- * This class is enabled to work with UTIL_NO_STD_LIBRARY defined.
+ * This class is enabled to work with UTIL_NOSTDLIB defined.
  *
  * @tparam Enum the used enum
  * @tparam EnumUnderlyingType the enum's underlying type, 32-bit integer by default

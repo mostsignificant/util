@@ -93,7 +93,7 @@ typename util::scoped<T>::reference util::scoped<T>::operator*() const {
 #if defined UTIL_USE_EXCEPTIONS
     if (!ptr_) throw scoped_nullptr_exception();
 #elif defined UTIL_USE_ASSERTIONS
-    util::assert(ptr_);
+    util_assert(ptr_);
 #endif
 
     return *ptr_;
@@ -104,7 +104,7 @@ typename util::scoped<T>::pointer util::scoped<T>::operator->() const {
 #if defined UTIL_USE_EXCEPTIONS
     if (!ptr_) throw scoped_nullptr_exception();
 #elif defined UTIL_USE_ASSERTIONS
-    util::assert(ptr_);
+    util_assert(ptr_);
 #endif
 
     return ptr_;
@@ -140,7 +140,7 @@ typename util::scoped<T>::pointer util::scoped<T>::get() const noexcept {
 #if defined UTIL_USE_EXCEPTIONS
     if (!ptr_) throw scoped_nullptr_exception();
 #elif defined UTIL_USE_ASSERTIONS
-    util::assert(ptr_);
+    util_assert(ptr_);
 #endif
 
     return ptr_;

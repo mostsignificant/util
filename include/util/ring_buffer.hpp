@@ -28,7 +28,7 @@
 #ifndef THAT_THIS_UTIL_RING_BUFFER_HEADER_IS_ALREADY_INCLUDED
 #define THAT_THIS_UTIL_RING_BUFFER_HEADER_IS_ALREADY_INCLUDED
 
-#ifndef UTIL_NO_STD_LIBRARY
+#ifndef UTIL_NOSTDLIB
 #include <array>
 #include <cstddef>
 #include <iterator>
@@ -42,7 +42,7 @@ using std::size_t;
 }  // namespace util
 #else
 #include <util.hpp>
-#endif  // UTIL_NO_STD_LIBRARY
+#endif  // UTIL_NOSTDLIB
 
 namespace util {
 

@@ -41,6 +41,11 @@ target_compile_features(${UTIL_TARGET_NAME} PRIVATE
         cxx_std_17
 )
 
+target_compile_definitions(${UTIL_TARGET_NAME} PUBLIC 
+        ${UTIL_NOSTDLIB}
+        ${UTIL_ASSERT}
+)
+
 target_include_directories(${UTIL_TARGET_NAME} PUBLIC
         ${UTIL_INC_DIR}
 )

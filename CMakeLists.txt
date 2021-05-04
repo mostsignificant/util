@@ -33,8 +33,10 @@ add_subdirectory(src)
 ### PROJECT OPTIONS
 ########################################################################################################################
 
-option(BUILD_DOCS  "Build documentation." OFF)
-option(BUILD_TESTS "Build tests."         OFF)
+option(BUILD_DOCS          "Build documentation."    OFF)
+option(BUILD_TESTS         "Build tests."            OFF)
+option(UTIL_ASSERT         "Throw util assertions"   OFF)
+option(UTIL_NOSTDLIB "Use without std library" OFF)
 
 if(BUILD_DOCS)
     add_subdirectory(doc)

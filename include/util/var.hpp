@@ -28,7 +28,7 @@
 #ifndef THAT_THIS_UTIL_VAR_HEADER_HEADER_FILE_IS_ALREADY_INCLUDED
 #define THAT_THIS_UTIL_VAR_HEADER_HEADER_FILE_IS_ALREADY_INCLUDED
 
-#ifndef UTIL_NO_STD_LIBRARY
+#ifndef UTIL_NOSTDLIB
 #include <utility>
 namespace util {
 using std::move;

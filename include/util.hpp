@@ -28,7 +28,33 @@
 #ifndef THAT_THIS_UTIL_HEADER_FILE_IS_ALREADY_INCLUDED
 #define THAT_THIS_UTIL_HEADER_FILE_IS_ALREADY_INCLUDED
 
-#ifdef UTIL_NO_STD_LIBRARY
+#ifndef UTIL_NOSTDLIB
+#include <exception>
+#endif
+
+namespace util {
+
+#ifdef UTIL_NOSTDLIB
+class exception {
+#else
+class exception : public std::exception {
+#endif
+public:
+    explicit exception(const char* msg) : message(msg) {}
+
+#ifdef UTIL_NOSTDLIB
+    const char* what() const noexcept { return message; };
+#else
+    const char* what() const noexcept override { return message; };
+#endif
+
+private:
+    const char* message;
+};
+
+}  // namespace util
+
+#ifdef UTIL_NOSTDLIB
 namespace util {
 
 using int8 = char;
@@ -43,40 +69,29 @@ using size_t = unsigned long long;
 
 using ptrdiff_t = size_t;
 
-class exception {
-public:
-    explicit exception(const char* msg) : message(msg) {}
-    auto what() const noexcept -> const char* { return message; };
-
-private:
-    const char* message;
-};
-
 class out_of_range : public exception {
 public:
     explicit out_of_range(const char* msg) : exception(msg) {}
 };
 
 }  // namespace util
-#endif  // UTIL_NO_STD_LIBRARY
+#endif  // UTIL_NOSTDLIB
 
 #ifdef UTIL_ASSERT
 namespace util {
-
-struct placeholder {};
 
 class assertion : public exception {
 public:
     explicit assertion(const char* msg) : exception(msg) {}
 };
 
-#define assert(condition)                                 \
-    placeholder{};                                        \
-    if (!condition) {                                     \
-        throw assertion{"assertion failed: ##condition"}; \
+}  // namespace util
+
+#define util_assert(condition)                            \
+    if (!(condition)) {                                   \
+        throw assertion{"assertion failed: " #condition}; \
     }
 
-}  // namespace util
 #endif  // UTIL_ASSERT
 
 #endif  // THAT_THIS_UTIL_HEADER_FILE_IS_ALREADY_INCLUDED

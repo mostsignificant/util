@@ -28,6 +28,10 @@
 #ifndef THAT_THIS_UTIL_SORTED_HEADER_IS_ALREADY_INCLUDED
 #define THAT_THIS_UTIL_SORTED_HEADER_IS_ALREADY_INCLUDED
 
+#ifdef UTIL_ASSERT
+#include <util.hpp>
+#endif
+
 #include <algorithm>
 #include <array>
 #include <forward_list>
@@ -209,7 +213,7 @@ auto sorted<Container, Compare>::at(size_type pos) const -> const_reference {
 template <class Container, class Compare>
 auto sorted<Container, Compare>::operator[](size_type pos) const -> const_reference {
 #ifdef UTIL_ASSERT
-    util::assert(pos >= size());
+    util_assert(pos < size());
 #endif  // UTIL_ASSERT
 
     if constexpr (is_forward_list::value || is_list::value) {

@@ -117,15 +117,39 @@ TEST(UtilSorted, OperatorSquareBrackets) {
     assert(numbers[2] == 3);
     //! [sorted_operator_square_brackets]
 
+#ifdef UTIL_ASSERT
+    try {
+        const auto x = numbers[3];
+    } catch (const util::assertion& a) {
+        assert(true);
+    }
+#endif
+
     const util::sorted_forward_list<int> fwd_list = {3, 1, 2};
     assert(fwd_list[0] == 1);
     assert(fwd_list[1] == 2);
     assert(fwd_list[2] == 3);
 
+#ifdef UTIL_ASSERT
+    try {
+        const auto x = fwd_list[3];
+    } catch (const util::assertion& a) {
+        assert(true);
+    }
+#endif
+
     const util::sorted_list<int> list = {3, 1, 2};
     assert(list[0] == 1);
     assert(list[1] == 2);
     assert(list[2] == 3);
+
+#ifdef UTIL_ASSERT
+    try {
+        const auto x = list[3];
+    } catch (const util::assertion& a) {
+        assert(true);
+    }
+#endif
 }
 
 TEST(UtilSorted, Size) {
