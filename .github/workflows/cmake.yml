@@ -6,16 +6,17 @@ on:
   pull_request:
     branches: [ master ]
 
-env:
-  BUILD_TYPE: Release
-
 jobs:
   build:
     runs-on: ${{ matrix.os }}
-    
+
     strategy:
       matrix:
         os: [ ubuntu-latest, macos-latest, windows-latest ]
+        build-type: [ Debug, Release ]
+
+    env:
+      BUILD_TYPE: ${{ matrix.build-type }}
 
     steps:
     - name: Checkout repository and submodules
