@@ -14,7 +14,7 @@ jobs:
       matrix:
         os: [ ubuntu-latest, macos-latest, windows-latest ]
         build-type: [ Debug, Release ]
-        util-assert: [ -DUTIL_ASSERT=ON, -DUTIL_ASSERT=OFF ]
+        util-assert: [ UTIL_ASSERT=ON, UTIL_ASSERT=OFF ]
 
     env:
       BUILD_TYPE: ${{ matrix.build-type }}
@@ -30,8 +30,8 @@ jobs:
         cmake \
           -B ${{github.workspace}}/build \
           -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} \
-          -DBUILD_TESTS=ON ${{ matrix.build-type }} \
-          ${{ matrix.util-assert }}
+          -DBUILD_TESTS=ON \
+          -D${{ matrix.util-assert }}
 
     - name: Build
       run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
