@@ -25,34 +25,33 @@
  * IN THE SOFTWARE.
  */
 
-#ifndef THAT_THIS_UTIL_HEADER_FILE_IS_ALREADY_INCLUDED
-#define THAT_THIS_UTIL_HEADER_FILE_IS_ALREADY_INCLUDED
+#ifndef THAT_THIS_UTIL_EXCEPTION_HEADER_IS_ALREADY_INCLUDED
+#define THAT_THIS_UTIL_EXCEPTION_HEADER_IS_ALREADY_INCLUDED
 
 #ifndef UTIL_NOSTDLIB
 #include <exception>
 #endif
 
-#ifdef UTIL_NOSTDLIB
 namespace util {
 
-using int8 = char;
-using int16 = short;
-using int32 = int;
-using int64 = long long;
-using uint8 = unsigned char;
-using uint16 = unsigned short;
-using uint32 = unsigned int;
-using uint64 = unsigned long long;
-using size_t = unsigned long long;
-
-using ptrdiff_t = size_t;
-
-class out_of_range : public exception {
+#ifdef UTIL_NOSTDLIB
+class exception {
+#else
+class exception : public std::exception {
+#endif
 public:
-    explicit out_of_range(const char* msg) : exception(msg) {}
+    explicit exception(const char* msg) : message(msg) {}
+
+#ifdef UTIL_NOSTDLIB
+    const char* what() const noexcept { return message; };
+#else
+    const char* what() const noexcept override { return message; };
+#endif
+
+private:
+    const char* message;
 };
 
 }  // namespace util
-#endif  // UTIL_NOSTDLIB
 
-#endif  // THAT_THIS_UTIL_HEADER_FILE_IS_ALREADY_INCLUDED
+#endif  // THAT_THIS_UTIL_EXCEPTION_HEADER_IS_ALREADY_INCLUDED

@@ -60,6 +60,7 @@ set_target_properties(gmock_main PROPERTIES FOLDER extern)
 set(UTIL_TEST_DIR ${CMAKE_SOURCE_DIR}/test)
 
 util_add_test(array        ${UTIL_TEST_DIR}/array.test.cpp)
+util_add_test(assert       ${UTIL_TEST_DIR}/assert.test.cpp)
 util_add_test(buffer       ${UTIL_TEST_DIR}/buffer.test.cpp)
 util_add_test(flags        ${UTIL_TEST_DIR}/flags.test.cpp)
 util_add_test(multirator   ${UTIL_TEST_DIR}/multirator.test.cpp)

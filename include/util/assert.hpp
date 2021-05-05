@@ -25,34 +25,26 @@
  * IN THE SOFTWARE.
  */
 
-#ifndef THAT_THIS_UTIL_HEADER_FILE_IS_ALREADY_INCLUDED
-#define THAT_THIS_UTIL_HEADER_FILE_IS_ALREADY_INCLUDED
+#ifndef THAT_THIS_UTIL_ASSERT_HEADER_IS_ALREADY_INCLUDED
+#define THAT_THIS_UTIL_ASSERT_HEADER_IS_ALREADY_INCLUDED
 
-#ifndef UTIL_NOSTDLIB
-#include <exception>
-#endif
+#include <util/exception.hpp>
 
-#ifdef UTIL_NOSTDLIB
 namespace util {
 
-using int8 = char;
-using int16 = short;
-using int32 = int;
-using int64 = long long;
-using uint8 = unsigned char;
-using uint16 = unsigned short;
-using uint32 = unsigned int;
-using uint64 = unsigned long long;
-using size_t = unsigned long long;
-
-using ptrdiff_t = size_t;
-
-class out_of_range : public exception {
+/**
+ * A helper exception when an assertion is not met.
+ */
+class assertion : public exception {
 public:
-    explicit out_of_range(const char* msg) : exception(msg) {}
+    explicit assertion(const char* msg) : exception(msg) {}
 };
 
 }  // namespace util
-#endif  // UTIL_NOSTDLIB
 
-#endif  // THAT_THIS_UTIL_HEADER_FILE_IS_ALREADY_INCLUDED
+#define util_assert(condition)                                  \
+    if (!(condition)) {                                         \
+        throw util::assertion{"assertion failed: " #condition}; \
+    }
+
+#endif  // THAT_THIS_UTIL_ASSERT_HEADER_IS_ALREADY_INCLUDED

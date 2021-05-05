@@ -28,10 +28,6 @@
 #ifndef THAT_THIS_UTIL_SORTED_HEADER_IS_ALREADY_INCLUDED
 #define THAT_THIS_UTIL_SORTED_HEADER_IS_ALREADY_INCLUDED
 
-#ifdef UTIL_ASSERT
-#include <util.hpp>
-#endif
-
 #include <algorithm>
 #include <array>
 #include <forward_list>
@@ -39,6 +35,10 @@
 #include <list>
 #include <memory>
 #include <vector>
+
+#ifdef UTIL_ASSERT
+#include <util/assert.hpp>
+#endif
 
 namespace util {
 
