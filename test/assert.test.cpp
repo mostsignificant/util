@@ -6,7 +6,7 @@ TEST(UtilAssert, Exception) {
     try {
         util_assert(false);
     } catch (const util::assertion& a) {
-        assert(a.what() == "assertion failed: false");
+        assert(strcmp(a.what(), "assertion failed: false") == 0);
     }
 }
 
