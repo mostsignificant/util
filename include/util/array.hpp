@@ -28,7 +28,9 @@
 #ifndef THAT_THIS_UTIL_ARRAY_HEADER_IS_ALREADY_INCLUDED
 #define THAT_THIS_UTIL_ARRAY_HEADER_IS_ALREADY_INCLUDED
 
-#ifndef UTIL_NOSTDLIB
+#ifdef UTIL_NOSTDLIB
+#include <util.hpp>
+#else
 #include <cstddef>
 #include <iterator>
 #include <stdexcept>
@@ -38,8 +40,6 @@ using std::ptrdiff_t;
 using std::reverse_iterator;
 using std::size_t;
 }  // namespace util
-#else
-#include <util.hpp>
 #endif  // UTIL_NOSTDLIB
 
 #ifdef UTIL_ASSERT
@@ -117,6 +117,24 @@ constexpr auto get(const array<T, N>& a) noexcept -> const T&&;
 
 template <class T, class... U>
 array(T, U...) -> array<T, 1 + sizeof...(U)>;
+
+template <class T, size_t N>
+constexpr auto operator==(const array<T, N>& lhs, const array<T, N>& rhs) -> bool;
+
+template <class T, size_t N>
+constexpr auto operator!=(const array<T, N>& lhs, const array<T, N>& rhs) -> bool;
+
+template <class T, size_t N>
+constexpr auto operator<(const array<T, N>& lhs, const array<T, N>& rhs) -> bool;
+
+template <class T, size_t N>
+constexpr auto operator<=(const array<T, N>& lhs, const array<T, N>& rhs) -> bool;
+
+template <class T, size_t N>
+constexpr auto operator>(const array<T, N>& lhs, const array<T, N>& rhs) -> bool;
+
+template <class T, size_t N>
+constexpr auto operator>=(const array<T, N>& lhs, const array<T, N>& rhs) -> bool;
 
 /**
  * Returns the element at the given position with boundary checking.
@@ -366,6 +384,57 @@ template <util::size_t I, class T, util::size_t N>
 constexpr auto get(const array<T, N>& a) noexcept -> const T&& {
     static_assert(I < N, "I is out of range");
     return a[I];
+}
+
+template <class T, size_t N>
+constexpr auto operator==(const array<T, N>& lhs, const array<T, N>& rhs) -> bool {
+    return !(lhs != rhs);
+}
+
+template <class T, size_t N>
+constexpr auto operator!=(const array<T, N>& lhs, const array<T, N>& rhs) -> bool {
+    if constexpr (N == 0) {
+        return false;
+    } else {
+        for (util::size_t i = 0; i < N; ++i) {
+            if (!(lhs.elements[i] == rhs.elements[i])) {
+                return true;
+            }
+        }
+        return false;
+    }
+}
+
+template <class T, size_t N>
+constexpr auto operator<(const array<T, N>& lhs, const array<T, N>& rhs) -> bool {
+    if constexpr (N == 0) {
+        return false;
+    } else {
+        for (util::size_t i = 0; i < N; ++i) {
+            if (lhs.elements[i] < rhs.elements[i]) {
+                return true;
+            }
+            if (rhs.elements[i] < lhs.elements[i]) {
+                return false;
+            }
+        }
+        return false;
+    }
+}
+
+template <class T, size_t N>
+constexpr auto operator<=(const array<T, N>& lhs, const array<T, N>& rhs) -> bool {
+    return !(rhs < lhs);
+}
+
+template <class T, size_t N>
+constexpr auto operator>(const array<T, N>& lhs, const array<T, N>& rhs) -> bool {
+    return !(lhs <= rhs);
+}
+
+template <class T, size_t N>
+constexpr auto operator>=(const array<T, N>& lhs, const array<T, N>& rhs) -> bool {
+    return !(lhs < rhs);
 }
 
 /**

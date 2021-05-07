@@ -306,8 +306,8 @@ empty.fill(99);
 
 TEST(UtilArray, Swap) {
 //! [array_swap]
-util::array<int, 3> asc{ 1, 2, 3};
-util::array<int, 3> desc{ 3, 2, 1};
+util::array<int, 3> asc{ 1, 2, 3 };
+util::array<int, 3> desc{ 3, 2, 1 };
 asc.swap(desc);
 assert(asc.at(0) == 3);
 assert(asc.at(1) == 2);
@@ -316,6 +316,47 @@ assert(asc.at(2) == 1);
 
 util::array<int, 0> empty{};
 empty.swap(empty);
+}
+
+TEST(UtilArray, Comparison) {
+
+util::array<int, 3> numbers1{ 1, 2, 3 };
+util::array<int, 3> numbers2{ 1, 2, 3 };
+util::array<int, 3> numbers3{ 3, 3, 3 };
+
+util::array<int, 0> empty1{};
+util::array<int, 0> empty2{};
+
+// operator ==
+assert(numbers1 == numbers2);
+assert(!(numbers1 == numbers3));
+assert(empty1 == empty2);
+
+// operator !=
+assert(numbers1 != numbers3);
+assert(!(numbers1 != numbers2));
+assert(!(empty1 != empty2));
+
+// operator <
+assert(numbers1 < numbers3);
+assert(!(numbers1 < numbers2));
+assert(!(empty1 < empty2));
+
+// operator <=
+assert(numbers1 <= numbers3);
+assert(numbers1 <= numbers2);
+assert(empty1 <= empty2);
+
+// operator >
+assert(numbers3 > numbers1);
+assert(!(numbers2 > numbers1));
+assert(!(empty2 > empty1));
+
+// operator >=
+assert(numbers3 >= numbers1);
+assert(numbers2 >= numbers1);
+assert(empty2 >= empty1);
+
 }
 
 // clang-format on
