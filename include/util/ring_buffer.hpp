@@ -28,6 +28,7 @@
 #ifndef THAT_THIS_UTIL_RING_BUFFER_HEADER_IS_ALREADY_INCLUDED
 #define THAT_THIS_UTIL_RING_BUFFER_HEADER_IS_ALREADY_INCLUDED
 
+#include <algorithm>
 #include <array>
 #include <cstddef>
 #include <iterator>
