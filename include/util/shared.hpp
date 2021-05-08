@@ -34,7 +34,7 @@ template <class T>
 class shared {
 public:
 private:
-    util::size_t ref_ = 0;
+    std::size_t ref_ = 0;
 };
 
 }  // namespace util

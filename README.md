@@ -14,9 +14,7 @@ without additional setup.
 
 - util::array
 - util::buffer
-- util::list
 - util::ring_buffer
-- util::vector
 
 ### Utilities
 

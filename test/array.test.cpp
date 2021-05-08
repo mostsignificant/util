@@ -25,7 +25,7 @@ try {
     util::array<int, 0> empty{};
     auto&& val = empty.at(666);
 } 
-catch (const util::out_of_range& oor) {
+catch (const std::out_of_range& oor) {
     assert(true);
 }
 }
@@ -43,7 +43,7 @@ try {
     constexpr const util::array<int, 0> empty{};
     auto&& val = empty.at(666);
 } 
-catch (const util::out_of_range& oor) {
+catch (const std::out_of_range& oor) {
     assert(true);
 }
 }
@@ -69,7 +69,7 @@ try {
     util::array<int, 0> empty{};
     auto&& val = empty[666];
 } 
-catch (const util::out_of_range& oor) {
+catch (const std::out_of_range& oor) {
     assert(true);
 }
 }
@@ -95,7 +95,7 @@ try {
     constexpr const util::array<int, 0> empty{};
     auto&& val = empty[666];
 } 
-catch (const util::out_of_range& oor) {
+catch (const std::out_of_range& oor) {
     assert(true);
 }
 }
@@ -110,7 +110,7 @@ try {
     constexpr const util::array<int, 0> empty{};
     auto&& val = empty.front();
 } 
-catch (const util::out_of_range& oor) {
+catch (const std::out_of_range& oor) {
     assert(true);
 }
 }
@@ -125,7 +125,7 @@ try {
     constexpr const util::array<int, 0> empty{};
     auto&& val = empty.front();
 } 
-catch (const util::out_of_range& oor) {
+catch (const std::out_of_range& oor) {
     assert(true);
 }
 }
@@ -140,7 +140,7 @@ try {
     constexpr const util::array<int, 0> empty{};
     auto&& val = empty.back();
 } 
-catch (const util::out_of_range& oor) {
+catch (const std::out_of_range& oor) {
     assert(true);
 }
 }
@@ -155,7 +155,7 @@ try {
     constexpr const util::array<int, 0> empty{};
     auto&& val = empty.back();
 } 
-catch (const util::out_of_range& oor) {
+catch (const std::out_of_range& oor) {
     assert(true);
 }
 }

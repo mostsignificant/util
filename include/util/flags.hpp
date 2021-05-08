@@ -28,16 +28,8 @@
 #ifndef THAT_THIS_UTIL_FLAGS_HEADER_HEADER_FILE_IS_ALREADY_INCLUDED
 #define THAT_THIS_UTIL_FLAGS_HEADER_HEADER_FILE_IS_ALREADY_INCLUDED
 
-#ifndef UTIL_NOSTDLIB
 #include <cstdint>
 #include <initializer_list>
-namespace util {
-using int32 = int32_t;
-using std::initializer_list;
-}  // namespace util
-#else
-#include <util.hpp>
-#endif
 
 namespace util {
 
@@ -49,11 +41,11 @@ namespace util {
  * @tparam Enum the used enum
  * @tparam EnumUnderlyingType the enum's underlying type, 32-bit integer by default
  */
-template <class Enum, class EnumUnderlyingType = util::int32>
+template <class Enum, class EnumUnderlyingType = int32_t>
 class flags {
 public:
     explicit flags(Enum value);
-    flags(util::initializer_list<Enum> values);
+    flags(std::initializer_list<Enum> values);
 
     flags() = default;
     ~flags() = default;
@@ -73,7 +65,7 @@ public:
     auto test(Enum value) const noexcept -> bool;
 
 private:
-    EnumUnderlyingType value_ = static_cast<EnumUnderlyingType>(0);
+    EnumUnderlyingType value = static_cast<EnumUnderlyingType>(0);
 };
 
 }  // namespace util
@@ -82,16 +74,16 @@ private:
  * Constructs a flags object initialized with the given enum value.
  */
 template <class Enum, class EnumUnderlyingType>
-util::flags<Enum, EnumUnderlyingType>::flags(Enum value) : value_(value) {}
+util::flags<Enum, EnumUnderlyingType>::flags(Enum value) : value(value) {}
 
 /**
  * Constructs a flags object initialized with the flags from the
  * initializer_list OR'd together.
  */
 template <class Enum, class EnumUnderlyingType>
-util::flags<Enum, EnumUnderlyingType>::flags(util::initializer_list<Enum> values) {
+util::flags<Enum, EnumUnderlyingType>::flags(std::initializer_list<Enum> values) {
     for (auto&& value : values) {
-        value_ |= value;
+        this->value |= value;
     }
 }
 
@@ -104,7 +96,7 @@ util::flags<Enum, EnumUnderlyingType>::flags(util::initializer_list<Enum> values
  */
 template <class Enum, class EnumUnderlyingType>
 util::flags<Enum, EnumUnderlyingType>::operator EnumUnderlyingType() const {
-    return value_;
+    return value;
 }
 
 /**
@@ -114,7 +106,7 @@ util::flags<Enum, EnumUnderlyingType>::operator EnumUnderlyingType() const {
  */
 template <class Enum, class EnumUnderlyingType>
 util::flags<Enum, EnumUnderlyingType>::operator bool() const noexcept {
-    return value_ != 0;
+    return value != 0;
 }
 
 /**
@@ -123,7 +115,7 @@ util::flags<Enum, EnumUnderlyingType>::operator bool() const noexcept {
  * @snippet test/flags.test.cpp flags_operator_exclamationmark
  */
 template <class Enum, class EnumUnderlyingType>
-bool util::flags<Enum, EnumUnderlyingType>::operator!() const noexcept {
+auto util::flags<Enum, EnumUnderlyingType>::operator!() const noexcept -> bool {
     return !static_cast<bool>(*this);
 }
 
@@ -145,7 +137,7 @@ auto util::flags<Enum, EnumUnderlyingType>::flip(Enum value) noexcept
  */
 template <class Enum, class EnumUnderlyingType>
 void util::flags<Enum, EnumUnderlyingType>::reset() noexcept {
-    value_ = static_cast<EnumUnderlyingType>(0);
+    value = static_cast<EnumUnderlyingType>(0);
 }
 
 /**
@@ -167,9 +159,9 @@ template <class Enum, class EnumUnderlyingType>
 auto util::flags<Enum, EnumUnderlyingType>::set(Enum value, bool on) noexcept
     -> util::flags<Enum, EnumUnderlyingType>& {
     if (on) {
-        value_ |= value;
+        this->value |= value;
     } else {
-        value_ &= ~value;
+        this->value &= ~value;
     }
 }
 
@@ -180,7 +172,7 @@ auto util::flags<Enum, EnumUnderlyingType>::set(Enum value, bool on) noexcept
  */
 template <class Enum, class EnumUnderlyingType>
 auto util::flags<Enum, EnumUnderlyingType>::test(Enum value) const noexcept -> bool {
-    return value_ & value;
+    return this->value & value;
 }
 
 #endif  // THAT_THIS_UTIL_FLAGS_HEADER_HEADER_FILE_IS_ALREADY_INCLUDED

@@ -28,48 +28,35 @@
 #ifndef THAT_THIS_UTIL_RING_BUFFER_HEADER_IS_ALREADY_INCLUDED
 #define THAT_THIS_UTIL_RING_BUFFER_HEADER_IS_ALREADY_INCLUDED
 
-#ifndef UTIL_NOSTDLIB
 #include <array>
 #include <cstddef>
 #include <iterator>
 #include <stdexcept>
-namespace util {
-using std::array;
-using std::out_of_range;
-using std::ptrdiff_t;
-using std::reverse_iterator;
-using std::size_t;
-}  // namespace util
-#else
-#include <util.hpp>
-#endif  // UTIL_NOSTDLIB
 
 namespace util {
 
 namespace detail {
-template <class T>
+template <bool IsConst, class T, std::size_t N>
 class ring_buffer_iterator;
-template <class T>
-class ring_buffer_const_iterator;
 }  // namespace detail
 
 /**
  * A fixed-size ring buffer implementation.
  */
-template <class T, util::size_t N>
+template <class T, std::size_t N>
 class ring_buffer {
 public:
     using value_type = T;
-    using size_type = util::size_t;
-    using difference_type = util::ptrdiff_t;
+    using size_type = std::size_t;
+    using difference_type = std::ptrdiff_t;
     using reference = value_type&;
     using const_reference = const value_type&;
     using pointer = value_type*;
     using const_pointer = const value_type*;
-    using iterator = detail::ring_buffer_iterator<T>;
-    using const_iterator = detail::ring_buffer_const_iterator<T>;
-    using reverse_iterator = util::reverse_iterator<iterator>;
-    using const_reverse_iterator = util::reverse_iterator<const_iterator>;
+    using iterator = detail::ring_buffer_iterator<false, T, N>;
+    using const_iterator = detail::ring_buffer_iterator<true, T, N>;
+    using reverse_iterator = std::reverse_iterator<iterator>;
+    using const_reverse_iterator = std::reverse_iterator<const_iterator>;
 
     ring_buffer() = default;
     ~ring_buffer() = default;
@@ -77,6 +64,8 @@ public:
     ring_buffer(const ring_buffer&) noexcept = default;
     auto operator=(ring_buffer&&) noexcept -> ring_buffer& = default;
     auto operator=(const ring_buffer&) noexcept -> ring_buffer& = default;
+
+    constexpr ring_buffer(std::initializer_list<T> ilist);
 
     constexpr auto at(size_type pos) -> reference;
     constexpr auto at(size_type pos) const -> const_reference;
@@ -93,87 +82,151 @@ public:
     constexpr auto size() const noexcept -> size_type;
     constexpr auto max_size() const noexcept -> size_type;
 
+    constexpr void push_back(const T& value);
+    constexpr void push_back(T&& value);
+
 private:
-    util::array<T, N> elements;
-    util::size_t pos_ = 0;
-    bool full_ = false;
+    std::array<T, N> elements;
+    std::size_t first = 0;  // points to the beginning of the elements
+    std::size_t last = 0;   // points to the last of the elements
+
+    void inc() noexcept;
+    void dec() noexcept;
 };
 
-template <class T, util::size_t N>
-constexpr auto ring_buffer<T, N>::at(size_type pos) -> ring_buffer<T, N>::reference {
-    return elements.at(pos);
+template <class T, std::size_t N>
+constexpr ring_buffer<T, N>::ring_buffer(std::initializer_list<T> ilist) {
+    if (ilist.size() > N) {
+        std::copy_n(ilist.end() - N, N, elements.begin());
+        last = N - 1;
+    } else {
+        std::copy_n(ilist.begin(), ilist.size(), elements.begin());
+        last = ilist.size() - 1;
+    }
 }
 
-template <class T, util::size_t N>
-constexpr auto ring_buffer<T, N>::at(size_type pos) const -> ring_buffer<T, N>::const_reference {
-    return elements.at(pos);
+template <class T, std::size_t N>
+constexpr auto ring_buffer<T, N>::at(size_type pos) -> reference {
+    // NOLINTNEXTLINE(cppcoreguidelines-pro-type-const-cast) @see Effective C++ by Scott Meyers
+    return const_cast<reference>(const_cast<const ring_buffer<T, N>*>(this)->at(pos));
 }
 
-template <class T, util::size_t N>
-constexpr auto ring_buffer<T, N>::operator[](size_type pos) -> ring_buffer<T, N>::reference {
+template <class T, std::size_t N>
+constexpr auto ring_buffer<T, N>::at(size_type pos) const -> const_reference {
+    if (pos >= size()) {
+        throw std::out_of_range{"pos is out of range"};
+    }
+
+    return operator[](pos);
+}
+
+template <class T, std::size_t N>
+constexpr auto ring_buffer<T, N>::operator[](size_type pos) -> reference {
     // NOLINTNEXTLINE(cppcoreguidelines-pro-type-const-cast) @see Effective C++ by Scott Meyers
     return const_cast<reference>(const_cast<const ring_buffer<T, N>*>(this)->operator[](pos));
 }
 
-template <class T, util::size_t N>
-constexpr auto ring_buffer<T, N>::operator[](size_type pos) const
-    -> ring_buffer<T, N>::const_reference {
-    if (pos >= size()) {
-        throw util::out_of_range{"pos is out of range"};
-    }
+template <class T, std::size_t N>
+constexpr auto ring_buffer<T, N>::operator[](size_type pos) const -> const_reference {
+#ifdef UTIL_ASSERT
+    util_assert(pos < size());
+#endif
 
-    const auto abs_pos = (pos_ + pos) - N;
-    return elements[abs_pos];
+    return elements[(first + pos) % N];
 }
 
-template <class T, util::size_t N>
-constexpr auto ring_buffer<T, N>::front() -> ring_buffer<T, N>::reference {
+template <class T, std::size_t N>
+constexpr auto ring_buffer<T, N>::front() -> reference {
     // NOLINTNEXTLINE(cppcoreguidelines-pro-type-const-cast) @see Effective C++ by Scott Meyers
     return const_cast<reference>(const_cast<const ring_buffer<T, N>*>(this)->front());
 }
 
-template <class T, util::size_t N>
-constexpr auto ring_buffer<T, N>::front() const -> ring_buffer<T, N>::const_reference {
-    if (full_ && pos_ < size() - 1) {
-        return elements[pos_ + 1];
-    }
-    return elements[0];
+template <class T, std::size_t N>
+constexpr auto ring_buffer<T, N>::front() const -> const_reference {
+    return elements[first];
 }
 
-template <class T, util::size_t N>
-constexpr auto ring_buffer<T, N>::back() -> ring_buffer<T, N>::reference {
+template <class T, std::size_t N>
+constexpr auto ring_buffer<T, N>::back() -> reference {
     // NOLINTNEXTLINE(cppcoreguidelines-pro-type-const-cast) @see Effective C++ by Scott Meyers
     return const_cast<reference>(const_cast<const ring_buffer<T, N>*>(this)->back());
 }
 
-template <class T, util::size_t N>
-constexpr auto ring_buffer<T, N>::back() const -> ring_buffer<T, N>::const_reference {
-    return elements[pos_];
+template <class T, std::size_t N>
+constexpr auto ring_buffer<T, N>::back() const -> const_reference {
+    return elements[last];
 }
 
-template <class T, util::size_t N>
-constexpr auto ring_buffer<T, N>::data() noexcept -> ring_buffer<T, N>::pointer {
+template <class T, std::size_t N>
+constexpr auto ring_buffer<T, N>::data() noexcept -> pointer {
     return elements.data();
 }
 
-template <class T, util::size_t N>
-constexpr auto ring_buffer<T, N>::data() const noexcept -> ring_buffer<T, N>::const_pointer {
+template <class T, std::size_t N>
+constexpr auto ring_buffer<T, N>::data() const noexcept -> const_pointer {
     return elements.data();
 }
 
-template <class T, util::size_t N>
+template <class T, std::size_t N>
 constexpr auto ring_buffer<T, N>::empty() const noexcept -> bool {
-    return !full_ && pos_ != 0;
+    return first == 0 && last == 0;
 }
 
-template <class T, util::size_t N>
-constexpr auto ring_buffer<T, N>::size() const noexcept -> ring_buffer<T, N>::size_type {
-    return full_ ? N : pos_;
+template <class T, std::size_t N>
+constexpr auto ring_buffer<T, N>::size() const noexcept -> size_type {
+    if (first == 0 && last < N - 1) {
+        return last - first;
+    }
+    return N;
 }
 
-template <class T, util::size_t N>
-constexpr auto ring_buffer<T, N>::max_size() const noexcept -> ring_buffer<T, N>::size_type {
+template <class T, std::size_t N>
+constexpr auto ring_buffer<T, N>::max_size() const noexcept -> size_type {
     return elements.max_size();
+}
+
+template <class T, std::size_t N>
+constexpr void ring_buffer<T, N>::push_back(const T& value) {
+    inc();
+    elements[last] = value;
+}
+
+template <class T, std::size_t N>
+constexpr void ring_buffer<T, N>::push_back(T&& value) {
+    inc();
+    elements[last] = value;
+}
+
+/**
+ * Shifts the internal position pointers by one position forward with wrap around.
+ */
+template <class T, std::size_t N>
+void ring_buffer<T, N>::inc() noexcept {
+    if (++first >= N) {
+        first = 0;
+    }
+
+    if (++last >= N) {
+        last = 0;
+    }
+}
+
+/**
+ * Shifts the internal position pointers by one position backwards with wrap around.
+ */
+template <class T, std::size_t N>
+void ring_buffer<T, N>::dec() noexcept {
+    if (first == 0) {
+        first = N - 1;
+    } else {
+        first--;
+    }
+
+    if (last == 0) {
+        last = N - 1;
+    } else {
+        last--;
+    }
 }
 
 }  // namespace util

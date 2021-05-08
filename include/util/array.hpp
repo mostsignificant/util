@@ -28,23 +28,9 @@
 #ifndef THAT_THIS_UTIL_ARRAY_HEADER_IS_ALREADY_INCLUDED
 #define THAT_THIS_UTIL_ARRAY_HEADER_IS_ALREADY_INCLUDED
 
-#ifdef UTIL_NOSTDLIB
-#include <util.hpp>
-#else
 #include <cstddef>
 #include <iterator>
 #include <stdexcept>
-namespace util {
-using std::out_of_range;
-using std::ptrdiff_t;
-using std::reverse_iterator;
-using std::size_t;
-}  // namespace util
-#endif  // UTIL_NOSTDLIB
-
-#ifdef UTIL_ASSERT
-#include <util/assert.hpp>
-#endif
 
 namespace util {
 
@@ -53,20 +39,20 @@ namespace util {
  *
  * @snippet test/array.test.cpp array_ctor
  */
-template <class T, util::size_t N>
+template <class T, std::size_t N>
 class array {
 public:
     using value_type = T;
-    using size_type = util::size_t;
-    using difference_type = util::ptrdiff_t;
+    using size_type = std::size_t;
+    using difference_type = std::ptrdiff_t;
     using reference = value_type&;
     using const_reference = const value_type&;
     using pointer = value_type*;
     using const_pointer = const value_type*;
     using iterator = pointer;
     using const_iterator = const_pointer;
-    using reverse_iterator = util::reverse_iterator<iterator>;
-    using const_reverse_iterator = util::reverse_iterator<const_iterator>;
+    using reverse_iterator = std::reverse_iterator<iterator>;
+    using const_reverse_iterator = std::reverse_iterator<const_iterator>;
 
     constexpr auto at(size_type pos) -> reference;
     constexpr auto at(size_type pos) const -> const_reference;
@@ -103,16 +89,16 @@ public:
     T elements[N];
 };
 
-template <util::size_t I, class T, util::size_t N>
+template <std::size_t I, class T, std::size_t N>
 constexpr auto get(array<T, N>& a) noexcept -> T&;
 
-template <util::size_t I, class T, util::size_t N>
+template <std::size_t I, class T, std::size_t N>
 constexpr auto get(array<T, N>& a) noexcept -> T&&;
 
-template <util::size_t I, class T, util::size_t N>
+template <std::size_t I, class T, std::size_t N>
 constexpr auto get(const array<T, N>& a) noexcept -> const T&;
 
-template <util::size_t I, class T, util::size_t N>
+template <std::size_t I, class T, std::size_t N>
 constexpr auto get(const array<T, N>& a) noexcept -> const T&&;
 
 template <class T, class... U>
@@ -144,7 +130,7 @@ constexpr auto operator>=(const array<T, N>& lhs, const array<T, N>& rhs) -> boo
  * @throw out_of_range if pos >= size()
  * @return a reference to the requested element
  */
-template <class T, util::size_t N>
+template <class T, std::size_t N>
 constexpr auto array<T, N>::at(size_type pos) -> array<T, N>::reference {
     // NOLINTNEXTLINE(cppcoreguidelines-pro-type-const-cast) @see Effective C++ by Scott Meyers
     return const_cast<reference>(const_cast<const array<T, N>*>(this)->at(pos));
@@ -154,10 +140,10 @@ constexpr auto array<T, N>::at(size_type pos) -> array<T, N>::reference {
  * @see auto array<T, N>::at(size_type pos) -> reference
  * @snippet test/array.test.cpp array_at_const
  */
-template <class T, util::size_t N>
+template <class T, std::size_t N>
 constexpr auto array<T, N>::at(size_type pos) const -> array<T, N>::const_reference {
     if (!(pos < size())) {
-        throw util::out_of_range{"pos is out of range"};
+        throw std::out_of_range{"pos is out of range"};
     }
 
     return elements[pos];
@@ -171,7 +157,7 @@ constexpr auto array<T, N>::at(size_type pos) const -> array<T, N>::const_refere
  * @throw util::assertion if pos >= size() and UTIL_ASSERT defined
  * @return a reference to the requested element
  */
-template <class T, util::size_t N>
+template <class T, std::size_t N>
 constexpr auto array<T, N>::operator[](size_type pos) -> array<T, N>::reference {
     // NOLINTNEXTLINE(cppcoreguidelines-pro-type-const-cast) @see Effective C++ by Scott Meyers
     return const_cast<reference>(const_cast<const array<T, N>*>(this)->operator[](pos));
@@ -181,7 +167,7 @@ constexpr auto array<T, N>::operator[](size_type pos) -> array<T, N>::reference 
  * @see auto array<T, N>::operator(size_type pos) -> reference
  * @snippet test/array.test.cpp array_operator_square_brackets_const
  */
-template <class T, util::size_t N>
+template <class T, std::size_t N>
 constexpr auto array<T, N>::operator[](size_type pos) const -> array<T, N>::const_reference {
 #ifdef UTIL_ASSERT
     util_assert(pos < size());
@@ -195,7 +181,7 @@ constexpr auto array<T, N>::operator[](size_type pos) const -> array<T, N>::cons
  * @snippet test/array.test.cpp array_front
  * @return the first element of the array
  */
-template <class T, util::size_t N>
+template <class T, std::size_t N>
 constexpr auto array<T, N>::front() -> reference {
     // NOLINTNEXTLINE(cppcoreguidelines-pro-type-const-cast) @see Effective C++ by Scott Meyers
     return const_cast<reference>(const_cast<const array<T, N>*>(this)->front());
@@ -205,7 +191,7 @@ constexpr auto array<T, N>::front() -> reference {
  * @see auto array<T, N>::front() -> reference
  * @snippet test/array.test.cpp array_front_const
  */
-template <class T, util::size_t N>
+template <class T, std::size_t N>
 constexpr auto array<T, N>::front() const -> const_reference {
     return elements[0];
 }
@@ -216,7 +202,7 @@ constexpr auto array<T, N>::front() const -> const_reference {
  * @snippet test/array.test.cpp array_back
  * @return the last element of the array
  */
-template <class T, util::size_t N>
+template <class T, std::size_t N>
 constexpr auto array<T, N>::back() -> reference {
     // NOLINTNEXTLINE(cppcoreguidelines-pro-type-const-cast) @see Effective C++ by Scott Meyers
     return const_cast<reference>(const_cast<const array<T, N>*>(this)->back());
@@ -226,7 +212,7 @@ constexpr auto array<T, N>::back() -> reference {
  * @see auto array<T, N>::back() -> reference
  * @snippet test/array.test.cpp array_back_const
  */
-template <class T, util::size_t N>
+template <class T, std::size_t N>
 constexpr auto array<T, N>::back() const -> const_reference {
     return elements[N - 1];
 }
@@ -237,7 +223,7 @@ constexpr auto array<T, N>::back() const -> const_reference {
  * @snippet test/array.test.cpp array_data
  * @return a pointer to the first element in the array used internally by the array
  */
-template <class T, util::size_t N>
+template <class T, std::size_t N>
 constexpr auto array<T, N>::data() noexcept -> array<T, N>::pointer {
     // NOLINTNEXTLINE(cppcoreguidelines-pro-type-const-cast) @see Effective C++ by Scott Meyers
     return const_cast<pointer>(const_cast<const array<T, N>*>(this)->data());
@@ -247,7 +233,7 @@ constexpr auto array<T, N>::data() noexcept -> array<T, N>::pointer {
  * @see auto array<T, N>::data -> pointer
  * @snippet test/array.test.cpp array_const_data
  */
-template <class T, util::size_t N>
+template <class T, std::size_t N>
 constexpr auto array<T, N>::data() const noexcept -> array<T, N>::const_pointer {
     return elements;
 }
@@ -258,93 +244,93 @@ constexpr auto array<T, N>::data() const noexcept -> array<T, N>::const_pointer 
  * @snippet test/array.test.cpp array_begin
  * @return an iterator to the first element
  */
-template <class T, util::size_t N>
+template <class T, std::size_t N>
 constexpr auto array<T, N>::begin() noexcept -> iterator {
     // NOLINTNEXTLINE(cppcoreguidelines-pro-type-const-cast) @see Effective C++ by Scott Meyers
     return const_cast<pointer>(const_cast<const array<T, N>*>(this)->begin());
 }
 
-template <class T, util::size_t N>
+template <class T, std::size_t N>
 constexpr auto array<T, N>::begin() const noexcept -> const_iterator {
     return elements;
 }
 
-template <class T, util::size_t N>
+template <class T, std::size_t N>
 constexpr auto array<T, N>::cbegin() const noexcept -> const_iterator {
     // NOLINTNEXTLINE(cppcoreguidelines-pro-type-const-cast)
     return const_cast<const array<T, N>*>(this)->begin();
 }
 
-template <class T, util::size_t N>
+template <class T, std::size_t N>
 constexpr auto array<T, N>::end() noexcept -> iterator {
     // NOLINTNEXTLINE(cppcoreguidelines-pro-type-const-cast) @see Effective C++ by Scott Meyers
     return const_cast<pointer>(const_cast<const array<T, N>*>(this)->end());
 }
 
-template <class T, util::size_t N>
+template <class T, std::size_t N>
 constexpr auto array<T, N>::end() const noexcept -> const_iterator {
     return elements + N;
 }
 
-template <class T, util::size_t N>
+template <class T, std::size_t N>
 constexpr auto array<T, N>::cend() const noexcept -> const_iterator {
     // NOLINTNEXTLINE(cppcoreguidelines-pro-type-const-cast)
     return const_cast<const array<T, N>*>(this)->end();
 }
 
-template <class T, util::size_t N>
+template <class T, std::size_t N>
 constexpr auto array<T, N>::rbegin() noexcept -> reverse_iterator {
     return reverse_iterator(end());
 }
 
-template <class T, util::size_t N>
+template <class T, std::size_t N>
 constexpr auto array<T, N>::rbegin() const noexcept -> const_reverse_iterator {
     return const_reverse_iterator(end());
 }
 
-template <class T, util::size_t N>
+template <class T, std::size_t N>
 constexpr auto array<T, N>::crbegin() const noexcept -> const_reverse_iterator {
     return const_reverse_iterator(cend());
 }
 
-template <class T, util::size_t N>
+template <class T, std::size_t N>
 constexpr auto array<T, N>::rend() noexcept -> reverse_iterator {
     return reverse_iterator(begin());
 }
 
-template <class T, util::size_t N>
+template <class T, std::size_t N>
 constexpr auto array<T, N>::rend() const noexcept -> const_reverse_iterator {
     return const_reverse_iterator(begin());
 }
 
-template <class T, util::size_t N>
+template <class T, std::size_t N>
 constexpr auto array<T, N>::crend() const noexcept -> const_reverse_iterator {
     return const_reverse_iterator(cbegin());
 }
 
-template <class T, util::size_t N>
+template <class T, std::size_t N>
 constexpr auto array<T, N>::empty() const noexcept -> bool {
     return N == 0;
 }
 
-template <class T, util::size_t N>
+template <class T, std::size_t N>
 constexpr auto array<T, N>::size() const noexcept -> array<T, N>::size_type {
     return N;
 }
 
-template <class T, util::size_t N>
+template <class T, std::size_t N>
 constexpr auto array<T, N>::max_size() const noexcept -> array<T, N>::size_type {
     return N;
 }
 
-template <class T, util::size_t N>
+template <class T, std::size_t N>
 constexpr void array<T, N>::fill(const T& value) {
     for (auto& element : elements) {
         element = value;
     }
 }
 
-template <class T, util::size_t N>
+template <class T, std::size_t N>
 void array<T, N>::swap(array& other) {
     const auto tmp = *this;
     *this = other;
@@ -362,25 +348,25 @@ void array<T, N>::swap(array& other) {
  * @tparam T the type of elements of the array
  * @tparam N the size of the array
  */
-template <util::size_t I, class T, util::size_t N>
+template <std::size_t I, class T, std::size_t N>
 constexpr auto get(array<T, N>& a) noexcept -> T& {
     static_assert(I < N, "I is out of range");
     return a[I];
 }
 
-template <util::size_t I, class T, util::size_t N>
+template <std::size_t I, class T, std::size_t N>
 constexpr auto get(array<T, N>& a) noexcept -> T&& {
     static_assert(I < N, "I is out of range");
     return a[I];
 }
 
-template <util::size_t I, class T, util::size_t N>
+template <std::size_t I, class T, std::size_t N>
 constexpr auto get(const array<T, N>& a) noexcept -> const T& {
     static_assert(I < N, "I is out of range");
     return a[I];
 }
 
-template <util::size_t I, class T, util::size_t N>
+template <std::size_t I, class T, std::size_t N>
 constexpr auto get(const array<T, N>& a) noexcept -> const T&& {
     static_assert(I < N, "I is out of range");
     return a[I];
@@ -396,7 +382,7 @@ constexpr auto operator!=(const array<T, N>& lhs, const array<T, N>& rhs) -> boo
     if constexpr (N == 0) {
         return false;
     } else {
-        for (util::size_t i = 0; i < N; ++i) {
+        for (std::size_t i = 0; i < N; ++i) {
             if (!(lhs.elements[i] == rhs.elements[i])) {
                 return true;
             }
@@ -410,7 +396,7 @@ constexpr auto operator<(const array<T, N>& lhs, const array<T, N>& rhs) -> bool
     if constexpr (N == 0) {
         return false;
     } else {
-        for (util::size_t i = 0; i < N; ++i) {
+        for (std::size_t i = 0; i < N; ++i) {
             if (lhs.elements[i] < rhs.elements[i]) {
                 return true;
             }
@@ -444,51 +430,51 @@ template <class T>
 class array<T, 0> {
 public:
     using value_type = T;
-    using size_type = util::size_t;
-    using difference_type = util::ptrdiff_t;
+    using size_type = std::size_t;
+    using difference_type = std::ptrdiff_t;
     using reference = value_type&;
     using const_reference = const value_type&;
     using pointer = value_type*;
     using const_pointer = const value_type*;
     using iterator = pointer;
     using const_iterator = const_pointer;
-    using reverse_iterator = util::reverse_iterator<iterator>;
-    using const_reverse_iterator = util::reverse_iterator<const_iterator>;
+    using reverse_iterator = std::reverse_iterator<iterator>;
+    using const_reverse_iterator = std::reverse_iterator<const_iterator>;
 
     constexpr auto at(size_type pos) -> reference {
         pos = pos;
-        throw util::out_of_range{"cannot access element of empty array"};
+        throw std::out_of_range{"cannot access element of empty array"};
     }
 
     constexpr auto at(size_type pos) const -> const_reference {
         pos = pos;
-        throw util::out_of_range{"cannot access element of empty array"};
+        throw std::out_of_range{"cannot access element of empty array"};
     }
 
     constexpr auto operator[](size_type pos) -> reference {
         pos = pos;
-        throw util::out_of_range{"cannot access element of empty array"};
+        throw std::out_of_range{"cannot access element of empty array"};
     }
 
     constexpr auto operator[](size_type pos) const -> const_reference {
         pos = pos;
-        throw util::out_of_range{"cannot access element of empty array"};
+        throw std::out_of_range{"cannot access element of empty array"};
     }
 
     constexpr auto front() -> reference {
-        throw util::out_of_range{"cannot access element of empty array"};
+        throw std::out_of_range{"cannot access element of empty array"};
     }
 
     constexpr auto front() const -> const_reference {
-        throw util::out_of_range{"cannot access element of empty array"};
+        throw std::out_of_range{"cannot access element of empty array"};
     }
 
     constexpr auto back() -> reference {
-        throw util::out_of_range{"cannot access element of empty array"};
+        throw std::out_of_range{"cannot access element of empty array"};
     }
 
     constexpr auto back() const -> const_reference {
-        throw util::out_of_range{"cannot access element of empty array"};
+        throw std::out_of_range{"cannot access element of empty array"};
     }
 
     constexpr auto data() noexcept -> pointer {
