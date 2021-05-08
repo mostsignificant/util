@@ -32,6 +32,10 @@
 #include <iterator>
 #include <stdexcept>
 
+#ifdef UTIL_ASSERT
+#include "assert.hpp"
+#endif
+
 namespace util {
 
 /**
