@@ -33,6 +33,7 @@
 #include <cstddef>
 #include <iterator>
 #include <stdexcept>
+#include <utility>
 
 #ifdef UTIL_ASSERT
 #include "assert.hpp"
@@ -88,9 +89,7 @@ public:
     constexpr auto max_size() const noexcept -> size_type;
 
     constexpr void push_front(const T& value);
-    constexpr void push_front(T&& value);
     constexpr void push_back(const T& value);
-    constexpr void push_back(T&& value);
 
 private:
     std::array<T, N> elements;
@@ -199,19 +198,7 @@ constexpr void ring_buffer<T, N>::push_front(const T& value) {
 }
 
 template <class T, std::size_t N>
-constexpr void ring_buffer<T, N>::push_front(T&& value) {
-    dec();
-    elements[first] = value;
-}
-
-template <class T, std::size_t N>
 constexpr void ring_buffer<T, N>::push_back(const T& value) {
-    inc();
-    elements[last] = value;
-}
-
-template <class T, std::size_t N>
-constexpr void ring_buffer<T, N>::push_back(T&& value) {
     inc();
     elements[last] = value;
 }
