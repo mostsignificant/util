@@ -87,6 +87,8 @@ public:
     constexpr auto size() const noexcept -> size_type;
     constexpr auto max_size() const noexcept -> size_type;
 
+    constexpr void push_front(const T& value);
+    constexpr void push_front(T&& value);
     constexpr void push_back(const T& value);
     constexpr void push_back(T&& value);
 
@@ -188,6 +190,18 @@ constexpr auto ring_buffer<T, N>::size() const noexcept -> size_type {
 template <class T, std::size_t N>
 constexpr auto ring_buffer<T, N>::max_size() const noexcept -> size_type {
     return elements.max_size();
+}
+
+template <class T, std::size_t N>
+constexpr void ring_buffer<T, N>::push_front(const T& value) {
+    dec();
+    elements[first] = value;
+}
+
+template <class T, std::size_t N>
+constexpr void ring_buffer<T, N>::push_front(T&& value) {
+    dec();
+    elements[first] = value;
 }
 
 template <class T, std::size_t N>

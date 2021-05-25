@@ -50,11 +50,20 @@ TEST(UtilRingBuffer, AtConst) {
     EXPECT_EQ(overflow.at(4), 6);
 }
 
+TEST(UtilRingBuffer, PushFront) {
+    //! [ring_buffer_push_front]
+    util::ring_buffer<int, 5> values = {1, 2, 3, 4, 5};
+    values.push_front(6);
+    assert(values.at(0) == 6);
+    assert(values.at(4) == 4);
+    //! [ring_buffer_push_front]
+}
+
 TEST(UtilRingBuffer, PushBack) {
     //! [ring_buffer_push_back]
     util::ring_buffer<int, 5> values = {1, 2, 3, 4, 5};
     values.push_back(6);
     assert(values.at(0) == 2);
     assert(values.at(4) == 6);
-    //! [ring_buffer__push_back]
+    //! [ring_buffer_push_back]
 }
