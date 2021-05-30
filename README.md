@@ -22,6 +22,7 @@ without additional setup.
 - util::non_copyable and util::non_moveable
 - util::sorted with util::sorted_vector, util::sorted_list etc.
 - util::var
+- util::ignore_unused
 
 ### Memory management
 

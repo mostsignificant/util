@@ -10,6 +10,7 @@ set(UTIL_INC_FILES
         ${UTIL_INC_DIR}/util/buffer.hpp
         ${UTIL_INC_DIR}/util/exception.hpp
         ${UTIL_INC_DIR}/util/flags.hpp
+        ${UTIL_INC_DIR}/util/ignore_unused.hpp
         ${UTIL_INC_DIR}/util/multirator.hpp
         ${UTIL_INC_DIR}/util/non_copyable.hpp
         ${UTIL_INC_DIR}/util/non_moveable.hpp
@@ -26,6 +27,7 @@ set(UTIL_SRC_FILES
         ${UTIL_SRC_DIR}/buffer.cpp
         ${UTIL_SRC_DIR}/exception.cpp
         ${UTIL_SRC_DIR}/flags.cpp
+        ${UTIL_SRC_DIR}/ignore_unused.cpp
         ${UTIL_SRC_DIR}/multirator.cpp
         ${UTIL_SRC_DIR}/non_copyable.cpp
         ${UTIL_SRC_DIR}/non_moveable.cpp
