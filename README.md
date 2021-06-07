@@ -1,5 +1,6 @@
 # util
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/8ed8f925acc74bc180d47a041167c16f)](https://app.codacy.com/gh/mostsignificant/util?utm_source=github.com&utm_medium=referral&utm_content=mostsignificant/util&utm_campaign=Badge_Grade_Settings)
 [![CI](https://github.com/mostsignificant/util/actions/workflows/cmake.yml/badge.svg)](https://github.com/mostsignificant/util/actions/workflows/cmake.yml)
 [![Documentation](http://readthedocs.org/projects/mostsignificantutil/badge/?version=latest)](https://mostsignificantutil.readthedocs.io/en/latest/?badge=latest)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/mostsignificant/util/master/LICENSE.MIT)
