@@ -253,7 +253,7 @@ auto sorted<Container, Compare>::size() const noexcept -> size_type {
     if constexpr (is_forward_list::value) {
         size_type size = 0;
         for (auto it = container.begin(), end = container.end(); it != end; ++it) {
-            size++;
+            ++size;
         }
         return size;
     } else {

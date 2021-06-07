@@ -60,7 +60,7 @@ public:
     pointer release() noexcept;
     void reset(pointer ptr) noexcept;
     void swap(scoped& other) noexcept;
-    pointer get() const noexcept;
+    pointer get() const;
 
 private:
     pointer ptr_ = nullptr;
@@ -71,14 +71,12 @@ scoped<T> make_scoped();
 
 }  // namespace util
 
-#if UTIL_ASSERT
-#include <util.hpp>
+#ifdef UTIL_ASSERT
+#include "assert.hpp"
 #endif
 
 /**
- * Constructs a scoped pointer from given memory.
- *
- * @
+ * Constructs a scoped pointer from a given memory block.
  */
 template <class T>
 util::scoped<T>::scoped(pointer ptr) noexcept : ptr_(ptr) {}
@@ -90,10 +88,8 @@ util::scoped<T>::~scoped() {
 
 template <class T>
 typename util::scoped<T>::reference util::scoped<T>::operator*() const {
-#if defined UTIL_USE_EXCEPTIONS
-    if (!ptr_) throw scoped_nullptr_exception();
-#elif defined UTIL_USE_ASSERTIONS
-    util_assert(ptr_);
+#if defined UTIL_ASSERT
+    util_assert(ptr_ != nullptr);
 #endif
 
     return *ptr_;
@@ -101,10 +97,8 @@ typename util::scoped<T>::reference util::scoped<T>::operator*() const {
 
 template <class T>
 typename util::scoped<T>::pointer util::scoped<T>::operator->() const {
-#if defined UTIL_USE_EXCEPTIONS
-    if (!ptr_) throw scoped_nullptr_exception();
-#elif defined UTIL_USE_ASSERTIONS
-    util_assert(ptr_);
+#if defined UTIL_ASSERT
+    util_assert(ptr_ != nullptr);
 #endif
 
     return ptr_;
@@ -136,11 +130,9 @@ void util::scoped<T>::swap(scoped& other) noexcept {
 }
 
 template <class T>
-typename util::scoped<T>::pointer util::scoped<T>::get() const noexcept {
-#if defined UTIL_USE_EXCEPTIONS
-    if (!ptr_) throw scoped_nullptr_exception();
-#elif defined UTIL_USE_ASSERTIONS
-    util_assert(ptr_);
+typename util::scoped<T>::pointer util::scoped<T>::get() const {
+#if defined UTIL_ASSERT
+    util_assert(ptr_ != nullptr);
 #endif
 
     return ptr_;
