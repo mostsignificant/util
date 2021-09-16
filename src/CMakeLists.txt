@@ -8,6 +8,7 @@ set(UTIL_INC_FILES
         ${UTIL_INC_DIR}/util/array.hpp
         ${UTIL_INC_DIR}/util/assert.hpp
         ${UTIL_INC_DIR}/util/buffer.hpp
+        ${UTIL_INC_DIR}/util/enumerate.hpp
         ${UTIL_INC_DIR}/util/exception.hpp
         ${UTIL_INC_DIR}/util/flags.hpp
         ${UTIL_INC_DIR}/util/ignore_unused.hpp
@@ -25,6 +26,7 @@ set(UTIL_SRC_FILES
         ${UTIL_SRC_DIR}/array.cpp
         ${UTIL_SRC_DIR}/assert.cpp
         ${UTIL_SRC_DIR}/buffer.cpp
+        ${UTIL_SRC_DIR}/enumerate.cpp
         ${UTIL_SRC_DIR}/exception.cpp
         ${UTIL_SRC_DIR}/flags.cpp
         ${UTIL_SRC_DIR}/ignore_unused.cpp
