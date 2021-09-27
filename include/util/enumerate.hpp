@@ -7,98 +7,89 @@
 
 namespace util {
 
-template <class Iter, class T, bool Const = false>
-class enumerate_iterator {
-public:
-    using pointer = typename std::conditional_t<Const, const T* const, T*>;
-    using reference = typename std::conditional_t<Const, const T&, T&>;
-
-    enumerate_iterator(Iter iterator, std::size_t pos);
-
-    auto operator!=(const enumerate_iterator& other) -> bool;
-    void operator++();
-    auto operator*() const -> std::pair<std::size_t, reference>;
-
-private:
-    Iter iterator;
-    std::size_t pos;
-};
-
-template <class Container, bool Const = false>
+/**
+ * A helper class for Python-like enumerating through the elements of a container.
+ *
+ * @tparam Container the type of container used in this range
+ */
+template <class Container>
 struct enumerate_range {
-    using container_iterator = typename Container::iterator;
-    using container_const_iterator = typename Container::const_iterator;
-    using value_type = typename Container::value_type;
-    using iterator = enumerate_iterator<container_iterator, value_type, Const>;
-    using const_iterator = enumerate_iterator<container_const_iterator, value_type, Const>;
-    using reference = typename std::conditional_t<Const, const Container&, Container&>;
+    static constexpr bool Const = std::is_const_v<Container>;
 
-    explicit enumerate_range(reference container);
+    class iterator {
+    public:
+        using size_type = typename Container::size_type;
+        using value_type = typename Container::value_type;
+        using pointer = typename std::conditional_t<Const, const value_type*, value_type*>;
+        using reference = typename std::conditional_t<Const, const value_type&, value_type&>;
+        using container_iterator =
+            typename std::conditional_t<Const, typename Container::const_iterator,
+                                        typename Container::iterator>;
 
-    enumerate_range() = delete;
+        struct pair {
+            size_type pos;
+            reference ref;
+        };
 
-    //  auto begin() -> iterator;
-    auto begin() const -> const_iterator;
-    auto cbegin() -> const_iterator;
-    // auto end() -> iterator;
-    auto end() const -> const_iterator;
-    auto cend() -> const_iterator;
+        iterator(container_iterator iterator);
+
+        auto operator!=(const iterator& other) -> bool;
+        auto operator++() -> iterator&;
+        auto operator*() const -> pair;
+
+    private:
+        container_iterator it;
+        size_type pos = 0;
+    };
+
+    using container_reference = Container&;
+
+    explicit enumerate_range(container_reference container);
+
+    auto begin() -> iterator;
+    auto end() -> iterator;
 
 private:
-    reference container;
+    container_reference container;
 };
 
 template <class Container>
-auto enumerate(const Container& container) -> enumerate_range<Container, true> {
-    return enumerate_range<Container, true>(container);
+auto enumerate(Container& container) -> enumerate_range<Container> {
+    return enumerate_range<Container>(container);
 }
 
 template <class Container>
-auto enumerate(Container& container) -> enumerate_range<Container, false> {
-    return enumerate_range<Container, false>(container);
+enumerate_range<Container>::enumerate_range(container_reference container) : container(container) {}
+
+template <class Container>
+auto enumerate_range<Container>::begin() -> iterator {
+    return iterator(container.begin());
 }
 
-template <class Container, bool Const>
-enumerate_range<Container, Const>::enumerate_range(reference container) : container(container) {}
-
-template <class Container, bool Const>
-auto enumerate_range<Container, Const>::begin() const -> const_iterator {
-    return const_iterator(container.begin(), 0);
+template <class Container>
+auto enumerate_range<Container>::end() -> iterator {
+    return iterator(container.end());
 }
 
-template <class Container, bool Const>
-auto enumerate_range<Container, Const>::cbegin() -> const_iterator {
-    return const_iterator(container.begin(), 0);
+template <class Container>
+enumerate_range<Container>::iterator::iterator(container_iterator iterator)
+    : it(iterator), pos(0) {}
+
+template <class Container>
+auto enumerate_range<Container>::iterator::operator!=(const iterator& other) -> bool {
+    return it != other.it;
 }
 
-template <class Container, bool Const>
-auto enumerate_range<Container, Const>::end() const -> const_iterator {
-    return const_iterator(container.end(), std::distance(container.begin(), container.end()));
-}
-
-template <class Container, bool Const>
-auto enumerate_range<Container, Const>::cend() -> const_iterator {
-    return const_iterator(container.end(), std::distance(container.begin(), container.end()));
-}
-
-template <class Iter, class T, bool Const>
-enumerate_iterator<Iter, T, Const>::enumerate_iterator(Iter iterator, std::size_t pos)
-    : iterator(iterator), pos(pos) {}
-
-template <class Iter, class T, bool Const>
-auto enumerate_iterator<Iter, T, Const>::operator!=(const enumerate_iterator& other) -> bool {
-    return iterator != other.iterator;
-}
-
-template <class Iter, class T, bool Const>
-void enumerate_iterator<Iter, T, Const>::operator++() {
-    iterator++;
+template <class Container>
+auto enumerate_range<Container>::iterator::operator++() -> iterator& {
+    it++;
     pos++;
+    return *this;
 }
 
-template <class Iter, class T, bool Const>
-auto enumerate_iterator<Iter, T, Const>::operator*() const -> std::pair<std::size_t, reference> {
-    return std::pair<std::size_t, reference>{pos, *iterator};
+template <class Container>
+auto enumerate_range<Container>::iterator::operator*() const -> pair {
+    return pair{pos, *it};
 }
 
 }  // namespace util
