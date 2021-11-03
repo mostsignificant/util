@@ -1,20 +1,38 @@
-#include "gtest/gtest.h"
-#include "util/multirator.hpp"
-
-/* using util::stx::multirator;
-
 #include <vector>
 
+#include "gtest/gtest.h"
+#include "test.hpp"
+#include "util/multirator.hpp"
+
+TEST(UtilMultirator, ConstIterator) {
+    const std::vector numbers = {1, 2, 3};
+    const std::vector names = {"Hello", "World", "!"};
+
+    const auto range = util::make_multirator_range(numbers, names);
+
+    auto i = 0;
+    for (auto&& [number, name] : range) {
+        assert(numbers[i] == number);
+        assert(std::strcmp(names[i], name) == 0);
+        i++;
+    }
+}
+
 TEST(UtilMultirator, Iterator) {
-    const std::vector numbers = { 1, 2, 3, 4, 5 };
-    const std::vector names = { "Hello", "World", "!" };
+    std::vector numbers = {1, 2, 3};
+    std::vector chars = {'A', 'B', 'C'};
 
-    for (auto mit = multirator(numbers.begin(), names.begin()); mit !=
-multirator(numbers.end(), names.end()); ++mit) {
+    auto range = util::make_multirator_range(numbers, chars);
 
+    auto i = 0;
+    for (auto& [number, ch] : range) {
+        number = number + 1;
+        ch = ch + 1;
     }
 
-    for (auto& [number, name] : util::stx::make_multirator_range(numbers,
-names)) { std::cout << number << '\n' << name  << '\n';
-    }
-}*/
+    const std::vector expected_numbers = {2, 3, 4};
+    const std::vector expected_chars = {'B', 'C', 'D'};
+
+    assert(numbers == expected_numbers);
+    assert(chars == expected_chars);
+}
