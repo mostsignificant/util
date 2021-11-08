@@ -19,8 +19,8 @@ without additional setup.
 
 ### Iterators
 
-- util::enumerate, a Python-like helper to iterate through a container and also have an index
-- util::multirator, an iterate through go through several ranges together
+- util::enumerate, a Python-like helper to iterate through a container with value and index
+- util::multirator, an iterator that can go several ranges simultaneously
 
 ### Utilities
 

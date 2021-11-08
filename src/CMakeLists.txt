@@ -33,6 +33,7 @@ set(UTIL_SRC_FILES
         ${UTIL_SRC_DIR}/multirator.cpp
         ${UTIL_SRC_DIR}/non_copyable.cpp
         ${UTIL_SRC_DIR}/non_moveable.cpp
+        ${UTIL_SRC_DIR}/range.cpp
         ${UTIL_SRC_DIR}/ring_buffer.cpp
         ${UTIL_SRC_DIR}/scoped.cpp
         ${UTIL_SRC_DIR}/shared.cpp
