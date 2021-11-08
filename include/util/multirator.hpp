@@ -9,6 +9,7 @@
 #include <cstring>
 #include <iterator>
 #include <tuple>
+#include <type_traits>
 
 namespace util {
 
@@ -102,7 +103,7 @@ private:
 
 template <class... Containers>
 class multirator_range {
-    static constexpr bool Const = std::is_const_v<Containers...>;
+    static constexpr bool Const = std::conjunction<std::is_const<Containers>...>::value;
 
 public:
     using iterator = multirator<typename Containers::iterator...>;
