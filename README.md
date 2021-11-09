@@ -13,24 +13,24 @@ without additional setup.
 
 ### Data structures
 
-- util::array
-- util::buffer
-- util::ring_buffer
+- util::buffer, a fixed-size data storage with additional dynamic storage if needed
+- util::ring_buffer, a fixed-sized container behaving like an end-to-end connected queue
+- util::sorted, a wrapper for keeping containers sorted
 
 ### Iterators
 
 - util::enumerate, a Python-like helper to iterate through a container with value and index
-- util::multirator, an iterator that can go several ranges simultaneously
+- util::multirator, an iterator that can go through several ranges simultaneously
+- util::range, a Python-like helper to create a quick range
 
-### Utilities
+### Helper
 
 - util::flags
-- util::non_copyable and util::non_moveable
-- util::sorted with util::sorted_vector, util::sorted_list etc.
-- util::var
+- util::non_copyable and util::non_moveable, for disallowing copying or moving on objects
+- util::var, for enforcing more strict named typing
 - util::ignore_unused
 
-### Memory management
+### Resource management
 
 - util::guarded
 - util::object

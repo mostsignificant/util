@@ -26,8 +26,9 @@ The util library is licensed under the MIT_ license.
    :maxdepth: 1
 
    compilerflags
-   ressourcemanagement
    datastructures
+   iterators
+   resourcemanagement
 
 .. toctree::
    :caption: API
