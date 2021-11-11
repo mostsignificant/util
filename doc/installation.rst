@@ -27,7 +27,7 @@ You also have to add it to your include directories:
 .. code-block:: cmake
 
     target_include_directories(${TARGET}
-        // ...
+        # ...
         util
     )
 
