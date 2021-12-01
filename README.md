@@ -25,15 +25,13 @@ without additional setup.
 
 ### Helper
 
-- util::flags
+- util::flags, a type-safe way of storing or-combinations of enum values
 - util::non_copyable and util::non_moveable, for disallowing copying or moving on objects
 - util::var, for enforcing more strict named typing
-- util::ignore_unused
+- util::ignore_unused, to circumvent compiler warnings about unused variables
 
 ### Resource management
 
-- util::guarded
-- util::object
 - util::scoped
 - util::shared
 

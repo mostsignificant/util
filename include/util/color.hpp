@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2021 Christian Göhring <mostsig@gmail.com>
+// SPDX-License-Identifier: MIT
+
 #ifndef THAT_THIS_UTIL_COLOR_HEADER_IS_ALREADY_INCLUDED
 #define THAT_THIS_UTIL_COLOR_HEADER_IS_ALREADY_INCLUDED
 
@@ -6,107 +9,144 @@
 
 namespace util {
 
+template <class T = std::uint8_t>
 class color {
 public:
-    color(uint8_t red, uint8_t green, uint8_t blue);
-    color(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha);
-    color(uint8_t red, uint8_t green, uint8_t blue, float alpha);
+    color(T red, T green, T blue);
+    color(T red, T green, T blue, T alpha);
+    color(T red, T green, T blue, float alpha);
     color(float red, float green, float blue);
-    color(float red, float green, float blue, uint8_t alpha);
+    color(float red, float green, float blue, T alpha);
     color(float red, float green, float blue, float alpha);
 
     ~color() = default;
     color(const color&) = default;
     color(color&&) = default;
-    auto operator=(const color&) -> color& = default;
-    auto operator=(color&&) -> color& = default;
+    auto operator=(const color&) noexcept -> color& = default;
+    auto operator=(color&&) noexcept -> color& = default;
 
-    static auto from_rgb(uint8_t red, uint8_t green, uint8_t blue) -> color;
-    static auto from_rgba(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha) -> color;
-    static auto from_rgba(uint8_t red, uint8_t green, uint8_t blue, float alpha) -> color;
+    static auto from_rgb(T red, T green, T blue) -> color;
+    static auto from_rgba(T red, T green, T blue, T alpha) -> color;
+    static auto from_rgba(T red, T green, T blue, float alpha) -> color;
     static auto from_rgb(float red, float green, float blue) -> color;
-    static auto from_rgba(float red, float green, float blue, uint8_t alpha) -> color;
+    static auto from_rgba(float red, float green, float blue, T alpha) -> color;
     static auto from_rgba(float red, float green, float blue, float alpha) -> color;
 
-    auto get_red() const noexcept -> uint8_t;
-    auto get_green() const noexcept -> uint8_t;
-    auto get_blue() const noexcept -> uint8_t;
-    auto get_alpha() const noexcept -> uint8_t;
+    auto get_red() const noexcept -> T;
+    auto get_green() const noexcept -> T;
+    auto get_blue() const noexcept -> T;
+    auto get_alpha() const noexcept -> T;
     auto get_red_as_float() const noexcept -> float;
     auto get_green_as_float() const noexcept -> float;
     auto get_blue_as_float() const noexcept -> float;
     auto get_alpha_as_float() const noexcept -> float;
 
 private:
-    uint8_t red = 0;
-    uint8_t green = 0;
-    uint8_t blue = 0;
-    uint8_t alpha = 0;
+    T red = 0;
+    T green = 0;
+    T blue = 0;
+    T alpha = 0;
 };
 
-color::color(uint8_t red, uint8_t green, uint8_t blue)
-    : color(red, green, blue, static_cast<uint8_t>(0)) {}
+template <class T>
+color<T>::color(T red, T green, T blue) : color(red, green, blue, static_cast<T>(0)) {}
 
-color::color(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
+template <class T>
+color<T>::color(T red, T green, T blue, T alpha)
     : red(red), green(green), blue(blue), alpha(alpha) {}
 
-color::color(uint8_t red, uint8_t green, uint8_t blue, float alpha)
-    : color(red, green, blue, static_cast<uint8_t>(alpha * std::numeric_limits<uint8_t>::max())) {}
+template <class T>
+color<T>::color(T red, T green, T blue, float alpha)
+    : color(red, green, blue, static_cast<T>(alpha * std::numeric_limits<T>::max())) {}
 
-color::color(float red, float green, float blue)
-    : color(static_cast<uint8_t>(red * std::numeric_limits<uint8_t>::max()),
-            static_cast<uint8_t>(green * std::numeric_limits<uint8_t>::max()),
-            static_cast<uint8_t>(blue * std::numeric_limits<uint8_t>::max()),
-            static_cast<uint8_t>(0)) {}
+template <class T>
+color<T>::color(float red, float green, float blue)
+    : color(static_cast<T>(red * std::numeric_limits<T>::max()),
+            static_cast<T>(green * std::numeric_limits<T>::max()),
+            static_cast<T>(blue * std::numeric_limits<T>::max()), static_cast<T>(0)) {}
 
-color::color(float red, float green, float blue, uint8_t alpha)
-    : color(static_cast<uint8_t>(red * std::numeric_limits<uint8_t>::max()),
-            static_cast<uint8_t>(green * std::numeric_limits<uint8_t>::max()),
-            static_cast<uint8_t>(blue * std::numeric_limits<uint8_t>::max()), alpha) {}
+template <class T>
+color<T>::color(float red, float green, float blue, T alpha)
+    : color(static_cast<T>(red * std::numeric_limits<T>::max()),
+            static_cast<T>(green * std::numeric_limits<T>::max()),
+            static_cast<T>(blue * std::numeric_limits<T>::max()), alpha) {}
 
-color::color(float red, float green, float blue, float alpha)
-    : color(static_cast<uint8_t>(red * std::numeric_limits<uint8_t>::max()),
-            static_cast<uint8_t>(green * std::numeric_limits<uint8_t>::max()),
-            static_cast<uint8_t>(blue * std::numeric_limits<uint8_t>::max()),
-            static_cast<uint8_t>(alpha * std::numeric_limits<uint8_t>::max())) {}
+template <class T>
+color<T>::color(float red, float green, float blue, float alpha)
+    : color(static_cast<T>(red * std::numeric_limits<T>::max()),
+            static_cast<T>(green * std::numeric_limits<T>::max()),
+            static_cast<T>(blue * std::numeric_limits<T>::max()),
+            static_cast<T>(alpha * std::numeric_limits<T>::max())) {}
 
-auto color::from_rgb(uint8_t red, uint8_t green, uint8_t blue) -> color {
+template <class T>
+auto color<T>::from_rgb(T red, T green, T blue) -> color {
     return {red, green, blue};
 }
 
-auto color::from_rgba(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha) -> color {
+template <class T>
+auto color<T>::from_rgba(T red, T green, T blue, T alpha) -> color {
     return {red, green, blue, alpha};
 }
 
-auto color::from_rgba(uint8_t red, uint8_t green, uint8_t blue, float alpha) -> color {
+template <class T>
+auto color<T>::from_rgba(T red, T green, T blue, float alpha) -> color {
     return {red, green, blue, alpha};
 }
 
-auto color::from_rgb(float red, float green, float blue) -> color { return {red, green, blue}; }
+template <class T>
+auto color<T>::from_rgb(float red, float green, float blue) -> color {
+    return {red, green, blue};
+}
 
-auto color::from_rgba(float red, float green, float blue, uint8_t alpha) -> color {
+template <class T>
+auto color<T>::from_rgba(float red, float green, float blue, T alpha) -> color {
     return {red, green, blue, alpha};
 }
 
-auto color::from_rgba(float red, float green, float blue, float alpha) -> color {
+template <class T>
+auto color<T>::from_rgba(float red, float green, float blue, float alpha) -> color {
     return {red, green, blue, alpha};
 }
 
-auto color::get_red() const noexcept -> uint8_t { return red; }
+template <class T>
+auto color<T>::get_red() const noexcept -> T {
+    return red;
+}
 
-auto color::get_green() const noexcept -> uint8_t { return green; }
+template <class T>
+auto color<T>::get_green() const noexcept -> T {
+    return green;
+}
 
-auto color::get_blue() const noexcept -> uint8_t { return blue; }
+template <class T>
+auto color<T>::get_blue() const noexcept -> T {
+    return blue;
+}
 
-auto color::get_alpha() const noexcept -> uint8_t { return alpha; }
+template <class T>
+auto color<T>::get_alpha() const noexcept -> T {
+    return alpha;
+}
 
-auto color::get_red_as_float() const noexcept -> float { return red; }
+template <class T>
+auto color<T>::get_red_as_float() const noexcept -> float {
+    return red;
+}
 
-auto color::get_green_as_float() const noexcept -> float { return green; }
+template <class T>
+auto color<T>::get_green_as_float() const noexcept -> float {
+    return green;
+}
 
-auto color::get_blue_as_float() const noexcept -> float { return blue; }
+template <class T>
+auto color<T>::get_blue_as_float() const noexcept -> float {
+    return blue;
+}
 
-auto color::get_alpha_as_float() const noexcept -> float { return alpha; }
+template <class T>
+auto color<T>::get_alpha_as_float() const noexcept -> float {
+    return alpha;
+}
 
 }  // namespace util
 
