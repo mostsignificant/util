@@ -28,6 +28,21 @@
 #ifndef THAT_THIS_UTIL_HEADER_FILE_IS_ALREADY_INCLUDED
 #define THAT_THIS_UTIL_HEADER_FILE_IS_ALREADY_INCLUDED
 
-#include <util/
+#include <util/assert.hpp>
+#include <util/buffer.hpp>
+#include <util/color.hpp>
+#include <util/enumerate.hpp>
+#include <util/exception.hpp>
+#include <util/flags.hpp>
+#include <util/ignore_unused.hpp>
+#include <util/multirator.hpp>
+#include <util/non_copyable.hpp>
+#include <util/non_moveable.hpp>
+#include <util/range.hpp>
+#include <util/ring_buffer.hpp>
+#include <util/scoped.hpp>
+#include <util/shared.hpp>
+#include <util/sorted.hpp>
+#include <util/var.hpp>
 
 #endif  // THAT_THIS_UTIL_HEADER_FILE_IS_ALREADY_INCLUDED
