@@ -51,7 +51,6 @@ target_compile_features(${UTIL_TARGET_NAME} PRIVATE
 )
 
 target_compile_definitions(${UTIL_TARGET_NAME} PUBLIC 
-        ${UTIL_NOSTDLIB}
         ${UTIL_ASSERT}
 )
 

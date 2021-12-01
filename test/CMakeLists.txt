@@ -18,10 +18,6 @@ macro(util_add_test TESTBASENAME)
 
     target_compile_features(${TESTNAME} PUBLIC cxx_std_17)
 
-    if(${UTIL_NOSTDLIB})
-        add_definitions(-DUTIL_NOSTDLIB)
-    endif(${UTIL_NOSTDLIB})
-
     if(${UTIL_ASSERT})
         add_definitions(-DUTIL_ASSERT)
     endif(${UTIL_ASSERT})

@@ -28,25 +28,15 @@
 #ifndef THAT_THIS_UTIL_EXCEPTION_HEADER_IS_ALREADY_INCLUDED
 #define THAT_THIS_UTIL_EXCEPTION_HEADER_IS_ALREADY_INCLUDED
 
-#ifndef UTIL_NOSTDLIB
 #include <exception>
-#endif
 
 namespace util {
 
-#ifdef UTIL_NOSTDLIB
-class exception {
-#else
 class exception : public std::exception {
-#endif
 public:
     explicit exception(const char* msg) : message(msg) {}
 
-#ifdef UTIL_NOSTDLIB
-    const char* what() const noexcept { return message; };
-#else
     const char* what() const noexcept override { return message; };
-#endif
 
 private:
     const char* message;

@@ -36,8 +36,6 @@ namespace util {
 /**
  * A helper for storing an OR-combination of enum values.
  *
- * This class is enabled to work with UTIL_NOSTDLIB defined.
- *
  * @tparam Enum the used enum
  * @tparam EnumUnderlyingType the enum's underlying type, 32-bit integer by default
  */
