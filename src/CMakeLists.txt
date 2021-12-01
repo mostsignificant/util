@@ -26,6 +26,7 @@ set(UTIL_SRC_FILES
         ${UTIL_SRC_DIR}/array.cpp
         ${UTIL_SRC_DIR}/assert.cpp
         ${UTIL_SRC_DIR}/buffer.cpp
+        ${UTIL_SRC_DIR}/color.cpp
         ${UTIL_SRC_DIR}/enumerate.cpp
         ${UTIL_SRC_DIR}/exception.cpp
         ${UTIL_SRC_DIR}/flags.cpp
