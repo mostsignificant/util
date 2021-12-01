@@ -42,3 +42,9 @@ TEST(UtilShared, UseCount) {
     assert(name2.use_count() == 2);
     //! [shared_use_count]
 }
+
+TEST(UtilShared, MakeShared) {
+    //! [shared_make_shared]
+    auto name = util::make_shared<std::string>("Chris");
+    //! [shared_make_shared]
+}
