@@ -25,12 +25,20 @@ TEST(UtilShared, Dtor) {
     assert(deleted);
 }
 
+TEST(UtilShared, Get) {
+    //! [shared_get]
+    util::shared<std::string> name(new std::string("Chris"));
+    assert(*name.get() == "Chris");
+    //! [shared_get]
+}
+
 TEST(UtilShared, UseCount) {
     //! [shared_use_count]
     util::shared<std::string> name(new std::string("Chris"));
     assert(name.use_count() == 1);
-    //! [shared_use_count]
 
     util::shared<std::string> name2(name);
     assert(name.use_count() == 2);
+    assert(name2.use_count() == 2);
+    //! [shared_use_count]
 }
